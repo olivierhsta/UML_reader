@@ -47,64 +47,53 @@ import javax.swing.border.Border;
  */
 public class Frame extends JFrame {
 	
-    private JPanel pnlMain, pnlContent, pnlFile, pnlClasses, pnlDetails;
+    private JPanel pnlMain, pnlContent, pnlFile, pnlClasses, pnlDetails, pnlMethods, pnlAttributes, pnlSubClasses, pnlAssociations;
     private JTextArea taFile, taClasses, taAttributes, taMethods, taSubClasses, taAssociations, taDetails;
     private JButton btnFile;
     private JScrollPane spFile, spDetails, spClasses, spAttributes, spMethods, spSubClasses, spAssociations;
+    private JLabel lblMethods, lblAttributes, lblSubClasses, lblAssociations, lblClasses, lblDetails;
     
-    Border border;   
-        
     public Frame(){
-        //positionner la fenetre principale
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(2 * dim.width / 9, dim.height / 6);
 
         pnlMain = new JPanel(new BorderLayout());
-
-        pnlFile = new JPanel(new FlowLayout());
-        taFile = new JTextArea("File", 2, 50);
-        spFile = new JScrollPane(taFile, 
-        		ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
-        	    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        btnFile = new JButton("Select");
-        pnlFile.add(btnFile);
-        pnlFile.add(spFile);
+        
         
         pnlContent = new JPanel(new GridLayout(2,2));
-        taMethods = new JTextArea("Methods");
-        spMethods = new JScrollPane(taMethods, 
-        		ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-        	    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        taAttributes = new JTextArea("Attributes");
-        spAttributes = new JScrollPane(taAttributes, 
-        		ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-        	    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        taSubClasses = new JTextArea("SubClasses");
-        spSubClasses = new JScrollPane(taSubClasses, 
-        		ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-        	    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        taAssociations = new JTextArea("Associations");
-        spAssociations = new JScrollPane(taAssociations, 
-        		ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-        	    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        pnlContent.add(spMethods);
-        pnlContent.add(spAttributes);
-        pnlContent.add(spSubClasses);
-        pnlContent.add(spAssociations);
         
-        pnlClasses = new JPanel(new FlowLayout());
+        pnlFile = new JPanel(new FlowLayout());
+        btnFile = new JButton("Select");
+        taFile = new JTextArea("File", 2, 40);
+        spFile = new JScrollPane(taFile,
+        		JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        pnlFile.add(btnFile);
+        pnlFile.add(taFile);
+        
+        pnlMethods = this.createContentPanel("Methods");
+        pnlAttributes = this.createContentPanel("Attributes");    
+        pnlSubClasses = this.createContentPanel("SubClasses");   
+        pnlAssociations = this.createContentPanel("Associations");
+        
+        pnlContent.add(pnlMethods);
+        pnlContent.add(pnlAttributes);
+        pnlContent.add(pnlSubClasses);
+        pnlContent.add(pnlAssociations);
+        
+        pnlClasses = new JPanel(new BorderLayout());
         taClasses = new JTextArea("Classes", 33, 15);
-        spClasses = new JScrollPane(taClasses, 
-        		ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-        	    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        pnlClasses.add(spClasses);
+        spClasses = new JScrollPane(taClasses);
+        lblClasses = new JLabel("Classes");
+        pnlClasses.add(lblClasses, BorderLayout.NORTH);
+        pnlClasses.add(spClasses, BorderLayout.CENTER);
         
-        pnlDetails = new JPanel(new FlowLayout());
+        pnlDetails = new JPanel(new BorderLayout());
         taDetails = new JTextArea("Details", 5, 85);
-        spDetails = new JScrollPane(taDetails, 
-        		ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-        	    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        pnlDetails.add(spDetails);
+        spDetails = new JScrollPane(taDetails);
+        lblDetails = new JLabel("Details");
+        pnlDetails.add(lblDetails, BorderLayout.NORTH);
+        pnlDetails.add(spDetails, BorderLayout.CENTER);
         
         pnlMain.add(pnlFile, BorderLayout.NORTH);
         pnlMain.add(pnlClasses, BorderLayout.WEST);
@@ -116,8 +105,20 @@ public class Frame extends JFrame {
         this.setTitle("UML Reader");
         this.setVisible(true);
 
-        //this.setPreferredSize(new Dimension(5 * dim.width / 9, 2 * dim.height / 3));
+        this.setPreferredSize(new Dimension(5 * dim.width / 9, 2 * dim.height / 3));
         this.setResizable(false);
         this.pack();
+    }
+    
+    private JPanel createContentPanel(String elementName) {
+    	
+    	JPanel pnlElement = new JPanel(new BorderLayout());
+        JTextArea taElement = new JTextArea(elementName);
+        JScrollPane spElement = new JScrollPane(taElement);
+        JLabel lblElement = new JLabel(elementName);
+        pnlElement.add(lblElement, BorderLayout.NORTH);
+        pnlElement.add(spElement, BorderLayout.CENTER);
+        
+        return pnlElement;
     }
 }
