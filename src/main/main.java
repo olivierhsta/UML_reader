@@ -1,12 +1,18 @@
 package main;
 
-import view.Frame;
+import controllers.UMLController;
+import models.UMLDecoder;
+import views.MainFrame;
 
 public class main {
 
 	public static void main(String[] args) {
-		new Frame();
-
+		UMLController controller = new UMLController();
+		MainFrame view = new MainFrame(controller);
+		UMLDecoder model = new UMLDecoder(controller);
+		
+		controller.setModel(model);
+		controller.setView(view);
 	}
 
 }
