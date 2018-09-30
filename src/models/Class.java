@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class Class extends ModelDeclaration {
 
-	private String name;
 	private ArrayList<Attribute> attributes = new ArrayList<>();
 	private ArrayList<Operation> operations = new ArrayList<>();
+	
+	private ArrayList<Class> subClasses = new ArrayList<>();
 
 	/**
 	 * Pas utile pour l'instant, mais j'estime qu'il soit possible que l'on
@@ -15,8 +16,12 @@ public class Class extends ModelDeclaration {
 	private Boolean parsed;
 
 	public Class(String name) {
-		this.name = name;
+		super(name);
 		this.parsed = false;
+	}
+	
+	public void setSubClasses(ArrayList<Class> subClasses) {
+		this.subClasses = subClasses;
 	}
 
 	@Override
@@ -76,6 +81,13 @@ public class Class extends ModelDeclaration {
 			}
 			
 			str += ")\n";
+		}
+		
+//		Impression des sous-classes
+		str += "\tSous-classes:\n";
+		for (Class subClass : this.subClasses) {
+			str += "\t\t" + subClass.name
+						+ "\n";
 		}
 		
 		return str;
