@@ -13,44 +13,31 @@ import javax.swing.JTextArea;
 public class FileInputComponent extends Component
 {
 	
-	JPanel pnl = new JPanel(new FlowLayout());
-	JButton btnFileSelect;
-	JTextArea taFilePath;
-	JScrollPane spFilePath;
+	private JButton btnFileSelect;
+	private File file;
 	
-	public FileInputComponent(String btnText, String taText)
+	protected FileInputComponent(String btnText, String taText)
 	{
+		super();
+		
+		super.pnl = new JPanel(new FlowLayout());
+		
 		this.btnFileSelect = new JButton(btnText);
-		this.btnFileSelect.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				FileChooser fileChooser = new FileChooser();
-				if (!fileChooser.cancelled())
-				{
-					setFile(fileChooser.getFile());
-				}
-				
-			}
-		});
-
-		this.taFilePath = new JTextArea(taText, 2, 40);
-		this.spFilePath = new JScrollPane(taFilePath);
-		this.pnl.add(btnFileSelect);
-		this.pnl.add(spFilePath);
-		super.setTextArea(this.taFilePath);
+		
+		super.ta = new JTextArea(taText, 2, 40);
+		super.sp = new JScrollPane(super.ta);
+		super.pnl.add(this.btnFileSelect);
+		super.pnl.add(super.sp);
+		
+		this.file=null;
 	}
 	
-	private void setFile(File file) {
-		this.taFilePath.setText(file.getPath());
+	protected void setFile(File file) {
+		this.file = file;
+		super.setText(file.getPath());
 	}
 	
-	public JPanel getJComponent() {
-		return this.pnl;
-	}
-	
-	public JButton getButton()
+	protected JButton getJButton()
 	{
 		return this.btnFileSelect;
 	}

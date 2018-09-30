@@ -16,7 +16,7 @@ public class FileChooser
 	private File selectedFile;
 	private boolean cancelled = false;
     
-    public FileChooser()
+    protected FileChooser()
     {
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -33,12 +33,12 @@ public class FileChooser
 		}
     }
     
-	public File getFile() 
+	protected File getFile() 
     {
     	return this.selectedFile;
     }
 	
-	public boolean cancelled()
+	protected boolean cancelled()
 	{
 		return this.cancelled;
 	}

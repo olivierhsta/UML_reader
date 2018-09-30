@@ -11,28 +11,14 @@ import javax.swing.JTextArea;
 
 public class Component
 {
-	private JPanel pnl;
-	private JLabel lbl;
-	private JTextArea ta;
-	private JScrollPane sp;
+	protected JPanel pnl;
+	protected JLabel lbl;
+	protected JTextArea ta;
+	protected JScrollPane sp;
 	
-	public Component()
-	{
-		this.pnl = new JPanel(new BorderLayout());
-		this.ta = new JTextArea();
-		this.sp = new JScrollPane(this.ta);
-		this.pnl.add(this.sp);
-	}
+	protected Component() {} // to allow children to create different constructor
 	
-	public Component(String text, int rows, int columns)
-	{
-		this.pnl = new JPanel(new BorderLayout());
-		this.ta = new JTextArea(text, rows, columns);
-		this.sp = new JScrollPane(ta);
-		this.pnl.add(this.sp);
-	}
-	
-	public Component(String text, String label)
+	protected Component(String text, String label)
 	{
 		this.pnl = new JPanel(new BorderLayout());
 		this.lbl = new JLabel(label);
@@ -42,7 +28,7 @@ public class Component
 		this.pnl.add(this.sp, BorderLayout.CENTER);
 	}
 	
-	public Component(String text, String label, int rows, int columns)
+	protected Component(String text, String label, int rows, int columns)
 	{
 		this.pnl = new JPanel(new BorderLayout());
 		this.lbl = new JLabel(label);
@@ -53,18 +39,19 @@ public class Component
 	}
 	
 	
-	public JComponent getJComponent()
+	protected JComponent getJComponent()
 	{
 		return this.pnl;
 	}
 	
-	public void setText(String text)
+	protected void setText(String text)
 	{
 		this.ta.setText(text);
 	}
-	
-	protected void setTextArea(JTextArea ta) {
-		this.ta = ta;
+
+	protected Object getJButton()
+	{
+		return null;
 	}
 	
 }

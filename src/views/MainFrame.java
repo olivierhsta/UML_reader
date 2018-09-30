@@ -9,6 +9,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -21,9 +25,10 @@ import controllers.UMLController;
 public class MainFrame extends JFrame
 {
 
-	private UMLController	controller;
-	private Component		cClasses, cDetails, cAttributes, cMethods, cSubClasses, cAssociations, cFileInput;
-	private JPanel			pnl, pnlElement;
+	private UMLController		controller;
+	private Component			cClasses, cDetails, cAttributes, cMethods, cSubClasses, cAssociations;
+	private FileInputComponent	cFileInput;
+	private JPanel				pnl, pnlElement;
 
 	public MainFrame(UMLController controller)
 	{
@@ -33,7 +38,19 @@ public class MainFrame extends JFrame
 		this.pnlElement = new JPanel(new GridLayout(2, 2));
 
 		this.cFileInput = new FileInputComponent("Select File", null);
+		this.cFileInput.getJButton().addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				FileChooser fileChooser = new FileChooser();
+				if (!fileChooser.cancelled())
+				{
+					setFile(fileChooser.getFile());
+				}
+
+			}
+		});
 		this.cClasses = new Component(null, "Classes", 30, 15);
 		this.cDetails = new Component(null, "Details", 5, 35);
 		this.cAttributes = new Component(null, "Attributes");
@@ -68,5 +85,11 @@ public class MainFrame extends JFrame
 		this.setPreferredSize(new Dimension(5 * dim.width / 9, 2 * dim.height / 3));
 		this.setResizable(false);
 		this.pack();
+	}
+	
+	private void setFile(File file)
+	{
+		this.cFileInput.setFile(file);
+		this.controller.setFile(file);
 	}
 }
