@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import controllers.UMLController;
-import views.MainFrame;
 
 public class UMLDecoder
 {
