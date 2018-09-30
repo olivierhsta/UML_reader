@@ -20,7 +20,7 @@ public class FileChooser
     {
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
-            "UML files", "uml");
+            "UML files", "uml", "ucd");
         chooser.setFileFilter(filter);
         int result = chooser.showSaveDialog(null);
         

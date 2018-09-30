@@ -8,8 +8,8 @@ import models.UMLDecoder;
 
 public class UMLController
 {
-	UMLDecoder model;
-	MainFrame view;
+	private UMLDecoder model;
+	private MainFrame view;
 	
 	public UMLController()
 	{
