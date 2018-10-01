@@ -2,7 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+import sun.text.normalizer.ReplaceableUCharacterIterator;
 
 public class Model {
 
@@ -16,6 +16,7 @@ public class Model {
 
 		ArrayList<Class> classes = new ArrayList<>();
 		ArrayList<Generalization> generalizations = new ArrayList<>();
+		ArrayList<RelationDeclaration> relationDeclarations = new ArrayList<>();
 
 		ModelDeclaration declaration = null;
 		for	(int i = 0 ; i < lines.size() ; i++) {
@@ -28,7 +29,9 @@ public class Model {
 
 			} else if (line.indexOf("RELATION") == 0) {
 //				Not implemented yet
-				declaration = null;
+				declaration = new RelationDeclaration(line.replace("RELATION", "").trim());
+				this.declarations.add(declaration);
+				relationDeclarations.add((RelationDeclaration)declaration);
 
 			} else if (line.indexOf("GENERALIZATION") == 0) {
 				declaration = new Generalization(line.replace("GENERALIZATION", "").trim());
@@ -51,6 +54,11 @@ public class Model {
 		
 		for (Generalization generalization : generalizations) {
 			generalization.applyGeneralisation(classes);
+		}
+		
+
+		for (RelationDeclaration relationDecl : relationDeclarations) {
+			relationDecl.apply(classes);
 		}
 		
 		for (ModelDeclaration decl : this.declarations) {

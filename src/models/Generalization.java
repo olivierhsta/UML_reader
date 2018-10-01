@@ -6,7 +6,6 @@ public class Generalization extends ModelDeclaration {
 
 	ArrayList<String> strSubClasses = new ArrayList<>();
 	
-	
 	public Generalization(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub

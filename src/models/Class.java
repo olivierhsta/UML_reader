@@ -8,6 +8,8 @@ public class Class extends ModelDeclaration {
 	private ArrayList<Operation> operations = new ArrayList<>();
 	
 	private ArrayList<Class> subClasses = new ArrayList<>();
+	
+	private ArrayList<Relation> relations = new ArrayList<>();
 
 	/**
 	 * Pas utile pour l'instant, mais j'estime qu'il soit possible que l'on
@@ -19,6 +21,14 @@ public class Class extends ModelDeclaration {
 		super(name);
 		this.parsed = false;
 	}
+	
+	public void addRelation(Relation relation) {
+		this.relations.add(relation);
+	}
+	
+//	public void removeRelation(String relationName) {
+//		
+//	}
 	
 	public void setSubClasses(ArrayList<Class> subClasses) {
 		this.subClasses = subClasses;
@@ -48,12 +58,7 @@ public class Class extends ModelDeclaration {
 					break;
 				}
 			}
-
-
 		}
-
-
-
 		this.parsed = true;
 	}
 
@@ -87,6 +92,13 @@ public class Class extends ModelDeclaration {
 		str += "\tSous-classes:\n";
 		for (Class subClass : this.subClasses) {
 			str += "\t\t" + subClass.name
+						+ "\n";
+		}
+
+//		Impression des relations
+		str += "\tRelations:\n";
+		for (Relation relation : this.relations) {
+			str += "\t\t" + relation.getName()
 						+ "\n";
 		}
 		
