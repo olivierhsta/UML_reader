@@ -23,7 +23,8 @@ public class Component
     protected JLabel lbl;
     protected JList list;
     protected JScrollPane sp;
-    CustomListModel listModel;
+    private CustomListModel listModel;
+    private ArrayList<String> listModelString = new ArrayList<String>();
 
     protected Component()
     {
@@ -61,7 +62,25 @@ public class Component
 
     protected void addElement(String s)
     {
+        this.listModelString.add(s);
         this.listModel.addElement(s);
+    }
+    
+    protected void clear() {
+        this.listModelString.clear();
+        this.listModel.deleteAll();
+    }
+    
+    protected int getListSize(){
+        return this.listModel.getSize();
+    }
+    
+    protected String getElementAt(int index){
+        return (String)this.listModel.getElementAt(index);
+    }
+    
+    protected void selectIndex(int index){
+        this.list.setSelectedIndex(index);
     }
 
 }
@@ -82,6 +101,11 @@ class CustomListModel extends AbstractListModel
         {
             fireContentsChanged(this, 0, getSize());
         }
+    }
+    
+    public void deleteAll(){
+        elements.clear();
+        fireContentsChanged(this, 0, getSize());
     }
 
     @Override

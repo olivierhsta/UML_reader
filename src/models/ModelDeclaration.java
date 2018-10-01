@@ -34,6 +34,10 @@ public abstract class ModelDeclaration {
 		
 		return str;
 	}
+        
+        public String getDetails(){
+            return this.joinLines();
+        }
 	
 	public abstract void parseLines();
 	@Override

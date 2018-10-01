@@ -104,7 +104,7 @@ public class MainFrame extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 JList list = (JList) e.getSource();
-                System.out.println(list.getSelectedValue());
+                notifyActionToController(list.getSelectedValue().toString());
             }
         });
 
@@ -131,49 +131,61 @@ public class MainFrame extends JFrame
 
     public void setClasses(ArrayList<String> classes)
     {
+        this.cClasses.clear();
         for (String sClass : classes)
         {
             this.cClasses.addElement(sClass);
         }
     }
 
-    public void setDetails(String[] details)
+    public void setDetails(String detail)
     {
-        for (String detail : details)
-        {
-            this.cDetails.addElement(detail);
-        }
+        this.cDetails.clear();
+        this.cDetails.addElement(detail);
     }
 
-    public void setAttributes(String[] attributes)
+    public void setAttributes(ArrayList<String> attributes)
     {
+        this.cAttributes.clear();
         for (String attribute : attributes)
         {
             this.cAttributes.addElement(attribute);
         }
     }
 
-    public void setMethods(String[] methods)
+    public void setMethods(ArrayList<String> methods)
     {
+        this.cMethods.clear();
         for (String method : methods)
         {
             this.cMethods.addElement(method);
         }
     }
 
-    public void setSubClasses(String[] subClasses)
+    public void setSubClasses(ArrayList<String> subClasses)
     {
+        this.cSubClasses.clear();
         for (String subClass : subClasses)
         {
             this.cSubClasses.addElement(subClass);
         }
     }
 
-    public void setAssociations(String[] associations)
+    public void setAssociations(ArrayList<String> associations)
     {
+        this.cAssociations.clear();
         for (String association : associations)
         {
             this.cAssociations.addElement(association);
+        }
+    }
+    
+    public void selectElementFromClassList(String className) {
+        for (int i = 0; i < this.cClasses.getListSize(); i++)
+        {
+            if (className.equals(this.cClasses.getElementAt(i))){
+                this.cClasses.selectIndex(i);
+            }
         }
     }
 
