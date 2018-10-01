@@ -62,11 +62,15 @@ public class Model {
 		}
 		
 		for (ModelDeclaration decl : this.declarations) {
-			System.out.println(decl.toString());
+			//System.out.println(decl.toString());
 		}
 
 	}
 
 
 
+        public ArrayList<ModelDeclaration> getModelDeclarations(){
+            return this.declarations;
+        }
+        
 }

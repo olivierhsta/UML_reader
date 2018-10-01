@@ -2,8 +2,13 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
 import javax.swing.AbstractListModel;
+import javax.swing.Action;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -11,7 +16,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-public class Component {
+public class Component
+{
 
     protected JPanel pnl;
     protected JLabel lbl;
@@ -19,9 +25,11 @@ public class Component {
     protected JScrollPane sp;
     CustomListModel listModel;
 
-    protected Component() {} // to allow children to create different constructor
-    
-    protected Component(String label) 
+    protected Component()
+    {
+    } // to allow children to create different constructor
+
+    protected Component(String label)
     {
         this.pnl = new JPanel(new BorderLayout());
         this.lbl = new JLabel(label);
@@ -33,7 +41,8 @@ public class Component {
         this.pnl.add(this.sp, BorderLayout.CENTER);
     }
 
-    protected Component(String label, int preferredWidth, int preferredHeight) {
+    protected Component(String label, int preferredWidth, int preferredHeight)
+    {
         this.pnl = new JPanel(new BorderLayout());
         this.pnl.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
         this.lbl = new JLabel(label);
@@ -45,36 +54,45 @@ public class Component {
         this.pnl.add(this.sp, BorderLayout.CENTER);
     }
 
-    protected JComponent getJComponent() {
+    protected JComponent getJComponent()
+    {
         return this.pnl;
     }
 
-    protected void addElement(String s) {
-
+    protected void addElement(String s)
+    {
         this.listModel.addElement(s);
     }
 
 }
 
-class CustomListModel extends AbstractListModel {
+class CustomListModel extends AbstractListModel
+{
 
     ArrayList<String> elements;
 
-    protected CustomListModel() {
+    protected CustomListModel()
+    {
         elements = new ArrayList<String>();
     }
-    
-    public void addElement(String s) {
-        elements.add(s);
+
+    public void addElement(String s)
+    {
+        if (elements.add(s))
+        {
+            fireContentsChanged(this, 0, getSize());
+        }
     }
 
     @Override
-    public int getSize() {
+    public int getSize()
+    {
         return elements.size();
     }
 
     @Override
-    public Object getElementAt(int index) {
+    public Object getElementAt(int index)
+    {
         return elements.get(index);
     }
 

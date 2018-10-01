@@ -20,6 +20,10 @@ public abstract class ModelDeclaration {
 	public int getLineCount() {
 		return this.lines.size();
 	}
+        
+        public String getName(){
+            return this.name;
+        }
 	
 	public abstract void parseLines();
 	@Override

@@ -17,6 +17,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import controllers.UMLController;
+import java.util.ArrayList;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 /**
@@ -64,6 +68,7 @@ public class MainFrame extends JFrame
         this.cAssociations = new Component("Associations");
 
         this.render();
+        this.declareListeners();
 
     }
 
@@ -92,13 +97,39 @@ public class MainFrame extends JFrame
         this.pack();
     }
 
+    private void declareListeners()
+    {
+        new ListAction(cClasses.list, new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                JList list = (JList) e.getSource();
+                System.out.println(list.getSelectedValue());
+            }
+        });
+
+        Action elementAction = new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                JList list = (JList) e.getSource();
+                notifyActionToController(list.getSelectedValue().toString());
+            }
+        };
+        
+        new ListAction(cAttributes.list, elementAction);
+        new ListAction(cMethods.list, elementAction);
+        new ListAction(cSubClasses.list, elementAction);
+        new ListAction(cAssociations.list, elementAction);
+    }
+
     private void setFile(File file)
     {
         this.cFileInput.setFile(file);
-        this.controller.setFile(file);
+        this.controller.generateModel(file);
     }
 
-    public void setClasses(String[] classes)
+    public void setClasses(ArrayList<String> classes)
     {
         for (String sClass : classes)
         {
@@ -144,5 +175,10 @@ public class MainFrame extends JFrame
         {
             this.cAssociations.addElement(association);
         }
+    }
+
+    private void notifyActionToController(String componentName)
+    {
+        this.controller.componentWasClicked(componentName);
     }
 }

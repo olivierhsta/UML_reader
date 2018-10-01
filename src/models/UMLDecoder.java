@@ -14,7 +14,7 @@ public class UMLDecoder
 	private File file;
 	private UMLController controller;
 	
-	private Model model;
+	private ArrayList<Model> fileModels;
 
 	public UMLDecoder(UMLController controller)
 	{
@@ -29,7 +29,7 @@ public class UMLDecoder
 	
 	public void parseFile() {
 		
-		ArrayList<Model> fileModels = new ArrayList<>();
+		fileModels = new ArrayList<>();
 		
 		String line = null;
 		try {
@@ -73,5 +73,9 @@ public class UMLDecoder
 			
 		}
 	}
+        
+        public ArrayList<Model> getUMLModels(){
+            return this.fileModels;
+        }
 	
 }
