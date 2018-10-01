@@ -1,6 +1,10 @@
-package models;
+package models.classes;
 
 import java.util.ArrayList;
+
+import models.ModelDeclaration;
+import models.aggregations.Aggregation;
+import models.relations.Relation;
 
 public class Class extends ModelDeclaration {
 
@@ -10,6 +14,8 @@ public class Class extends ModelDeclaration {
 	private ArrayList<Class> subClasses = new ArrayList<>();
 	
 	private ArrayList<Relation> relations = new ArrayList<>();
+	
+	private ArrayList<Aggregation> aggregations = new ArrayList<>();
 
 	/**
 	 * Pas utile pour l'instant, mais j'estime qu'il soit possible que l'on
@@ -22,8 +28,16 @@ public class Class extends ModelDeclaration {
 		this.parsed = false;
 	}
 	
+	public String getName() {
+		return this.name;
+	}
+	
 	public void addRelation(Relation relation) {
 		this.relations.add(relation);
+	}
+	
+	public void addAggregation(Aggregation aggregation) {
+		this.aggregations.add(aggregation);
 	}
 	
 //	public void removeRelation(String relationName) {
@@ -100,6 +114,13 @@ public class Class extends ModelDeclaration {
 		for (Relation relation : this.relations) {
 			str += "\t\t" + relation.getName()
 						+ "\n";
+		}
+
+//		Impression des aggregations
+		str += "\tAggregations:\n";
+		for (Aggregation aggre : this.aggregations) {
+			str += "\t\t" + aggre.getName() + "\n"
+					;
 		}
 		
 		return str;

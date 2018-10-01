@@ -25,6 +25,16 @@ public abstract class ModelDeclaration {
             return this.name;
         }
 	
+	public String joinLines() {
+		String str = "";
+		
+		for (String line : this.lines) {
+			str += line;
+		}
+		
+		return str;
+	}
+	
 	public abstract void parseLines();
 	@Override
 	public abstract String toString();

@@ -2,6 +2,10 @@ package models;
 
 import java.util.ArrayList;
 
+import models.aggregations.AggregationDeclaration;
+import models.classes.Class;
+import models.generalizations.Generalization;
+import models.relations.RelationDeclaration;
 import sun.text.normalizer.ReplaceableUCharacterIterator;
 
 public class Model {
@@ -17,6 +21,7 @@ public class Model {
 		ArrayList<Class> classes = new ArrayList<>();
 		ArrayList<Generalization> generalizations = new ArrayList<>();
 		ArrayList<RelationDeclaration> relationDeclarations = new ArrayList<>();
+		ArrayList<AggregationDeclaration> aggregationDeclarations = new ArrayList<>();
 
 		ModelDeclaration declaration = null;
 		for	(int i = 0 ; i < lines.size() ; i++) {
@@ -28,7 +33,6 @@ public class Model {
 				classes.add((Class) declaration);
 
 			} else if (line.indexOf("RELATION") == 0) {
-//				Not implemented yet
 				declaration = new RelationDeclaration(line.replace("RELATION", "").trim());
 				this.declarations.add(declaration);
 				relationDeclarations.add((RelationDeclaration)declaration);
@@ -39,8 +43,9 @@ public class Model {
 				generalizations.add((Generalization) declaration);
 
 			} else if (line.indexOf("AGGREGATION") == 0) {
-//				Not implemented yet
-				declaration = null;
+				declaration = new AggregationDeclaration();
+				this.declarations.add(declaration);
+				aggregationDeclarations.add((AggregationDeclaration) declaration);
 
 			} else {
 				if (declaration != null)
@@ -56,9 +61,12 @@ public class Model {
 			generalization.applyGeneralisation(classes);
 		}
 		
-
 		for (RelationDeclaration relationDecl : relationDeclarations) {
 			relationDecl.apply(classes);
+		}
+
+		for (AggregationDeclaration aggregationDeclaration : aggregationDeclarations) {
+			aggregationDeclaration.apply(classes);
 		}
 		
 		for (ModelDeclaration decl : this.declarations) {
