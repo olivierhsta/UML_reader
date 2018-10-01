@@ -2,6 +2,10 @@ package models;
 
 import java.util.ArrayList;
 
+import models.aggregations.AggregationDeclaration;
+import models.classes.Class;
+import models.generalizations.Generalization;
+import models.relations.RelationDeclaration;
 import sun.text.normalizer.ReplaceableUCharacterIterator;
 
 public class Model {

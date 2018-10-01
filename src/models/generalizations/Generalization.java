@@ -1,6 +1,9 @@
-package models;
+package models.generalizations;
 
 import java.util.ArrayList;
+
+import models.ModelDeclaration;
+import models.classes.Class;
 
 public class Generalization extends ModelDeclaration {
 
@@ -13,12 +16,12 @@ public class Generalization extends ModelDeclaration {
 	
 	public void applyGeneralisation(ArrayList<Class> classList) {
 		for (Class parentClass : classList) {
-			if (parentClass.name.equals(this.name)) {
+			if (parentClass.getName().equals(this.name)) {
 				ArrayList<Class> subClasses = new ArrayList<>();
 				
 				for (Class subClass : classList) {
 					for (String strSubClass : this.strSubClasses) {
-						if (subClass.name.equals(strSubClass)) {
+						if (subClass.getName().equals(strSubClass)) {
 							subClasses.add(subClass);
 						}
 					}

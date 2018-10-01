@@ -1,6 +1,9 @@
-package models;
+package models.aggregations;
 
 import java.util.ArrayList;
+
+import models.ModelDeclaration;
+import models.classes.Class;
 
 public class AggregationDeclaration extends ModelDeclaration {
 	
@@ -12,11 +15,10 @@ public class AggregationDeclaration extends ModelDeclaration {
 	}
 	
 	public void apply(ArrayList<Class> classes) {
-		System.out.println("applying <" + this.containerLine + ">");
 		String containerClassStr = this.containerLine.trim().split(" ")[1];
 		
 		for (Class containerClass : classes) {
-			if (containerClass.name.equals(containerClassStr)) {
+			if (containerClass.getName().equals(containerClassStr)) {
 				containerClass.addAggregation(new Aggregation(this.lines));
 			}
 		}

@@ -1,6 +1,10 @@
-package models;
+package models.classes;
 
 import java.util.ArrayList;
+
+import models.ModelDeclaration;
+import models.aggregations.Aggregation;
+import models.relations.Relation;
 
 public class Class extends ModelDeclaration {
 

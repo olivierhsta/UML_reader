@@ -1,4 +1,4 @@
-package models;
+package models.aggregations;
 
 import java.util.ArrayList;
 

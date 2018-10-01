@@ -1,6 +1,9 @@
-package models;
+package models.relations;
 
 import java.util.ArrayList;
+
+import models.ModelDeclaration;
+import models.classes.Class;
 
 public class RelationDeclaration extends ModelDeclaration {
 
@@ -17,7 +20,7 @@ public class RelationDeclaration extends ModelDeclaration {
 		for (String[] role : this.roles) {
 			
 			for (Class ownerClass : classList) {
-				if (ownerClass.name.equals(role[0])) {
+				if (ownerClass.getName().equals(role[0])) {
 					ownerClass.addRelation(new Relation(this.name, this.strLines));
 				}
 			}
