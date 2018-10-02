@@ -17,6 +17,10 @@ public class Relation {
 	public String getName() {
 		return this.name;
 	}
+        
+        public String getDetails(){
+            return this.details;
+        }
 
 	
 //	public void remove() {

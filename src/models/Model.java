@@ -11,14 +11,15 @@ import sun.text.normalizer.ReplaceableUCharacterIterator;
 public class Model {
 
 	private String name;
-	private ArrayList<ModelDeclaration> declarations = new ArrayList<>();
+	private ArrayList<Class> classes = new ArrayList<>();
 
 
 	public Model(String name, ArrayList<String> lines) {
 		super();
 		this.name = name;
 
-		ArrayList<Class> classes = new ArrayList<>();
+                ArrayList<ModelDeclaration> declarations = new ArrayList<>();
+		//ArrayList<Class> classes = new ArrayList<>();
 		ArrayList<Generalization> generalizations = new ArrayList<>();
 		ArrayList<RelationDeclaration> relationDeclarations = new ArrayList<>();
 		ArrayList<AggregationDeclaration> aggregationDeclarations = new ArrayList<>();
@@ -29,22 +30,22 @@ public class Model {
 
 			if (line.indexOf("CLASS") == 0) {
 				declaration = new Class(line.replace("CLASS", "").trim());
-				this.declarations.add(declaration);
-				classes.add((Class) declaration);
+				this.classes.add((Class) declaration);
+				declarations.add(declaration);
 
 			} else if (line.indexOf("RELATION") == 0) {
 				declaration = new RelationDeclaration(line.replace("RELATION", "").trim());
-				this.declarations.add(declaration);
+				declarations.add(declaration);
 				relationDeclarations.add((RelationDeclaration)declaration);
 
 			} else if (line.indexOf("GENERALIZATION") == 0) {
 				declaration = new Generalization(line.replace("GENERALIZATION", "").trim());
-				this.declarations.add(declaration);
+				declarations.add(declaration);
 				generalizations.add((Generalization) declaration);
 
 			} else if (line.indexOf("AGGREGATION") == 0) {
 				declaration = new AggregationDeclaration();
-				this.declarations.add(declaration);
+				declarations.add(declaration);
 				aggregationDeclarations.add((AggregationDeclaration) declaration);
 
 			} else {
@@ -53,7 +54,7 @@ public class Model {
 			}
 		}	
 		
-		for (ModelDeclaration decl : this.declarations) {
+		for (ModelDeclaration decl : declarations) {
 			decl.parseLines();
 		}
 		
@@ -69,7 +70,7 @@ public class Model {
 			aggregationDeclaration.apply(classes);
 		}
 		
-		for (ModelDeclaration decl : this.declarations) {
+		for (ModelDeclaration decl : declarations) {
 			//System.out.println(decl.toString());
 		}
 
@@ -77,8 +78,8 @@ public class Model {
 
 
 
-        public ArrayList<ModelDeclaration> getModelDeclarations(){
-            return this.declarations;
+        public ArrayList<Class> getClasses(){
+            return this.classes;
         }
         
 }

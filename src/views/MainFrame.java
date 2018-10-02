@@ -31,8 +31,9 @@ public class MainFrame extends JFrame
 {
 
     private UMLController controller;
-    private Component cClasses, cDetails, cAttributes, cMethods, cSubClasses, cAssociations;
+    private Component cClasses, cAttributes, cMethods, cSubClasses, cAssociations;
     private FileInputComponent cFileInput;
+    private DetailComponent cDetails;
     private JPanel pnl, pnlElement;
 
     public MainFrame(UMLController controller)
@@ -61,11 +62,12 @@ public class MainFrame extends JFrame
             }
         });
         this.cClasses = new Component("Classes", 200, 100);
-        this.cDetails = new Component("Details");
         this.cAttributes = new Component("Attributes");
         this.cMethods = new Component("Methods");
         this.cSubClasses = new Component("SubClasses");
         this.cAssociations = new Component("Associations");
+        
+        this.cDetails = new DetailComponent("Details");
 
         this.render();
         this.declareListeners();
@@ -104,7 +106,7 @@ public class MainFrame extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 JList list = (JList) e.getSource();
-                notifyActionToController(list.getSelectedValue().toString());
+                classIsClicked(list.getSelectedValue().toString());
             }
         });
 
@@ -113,14 +115,45 @@ public class MainFrame extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 JList list = (JList) e.getSource();
-                notifyActionToController(list.getSelectedValue().toString());
+                classIsClicked(list.getSelectedValue().toString());
             }
         };
         
-        new ListAction(cAttributes.list, elementAction);
-        new ListAction(cMethods.list, elementAction);
-        new ListAction(cSubClasses.list, elementAction);
-        new ListAction(cAssociations.list, elementAction);
+        new ListAction(cAttributes.list, new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                JList list = (JList) e.getSource();
+                attributeIsClicked(list.getSelectedValue().toString());
+            }
+        });
+        
+        new ListAction(cMethods.list, new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                JList list = (JList) e.getSource();
+                methodIsClicked(list.getSelectedValue().toString());
+            }
+        });
+        
+        new ListAction(cSubClasses.list, new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                JList list = (JList) e.getSource();
+                classIsClicked(list.getSelectedValue().toString());
+            }
+        });
+        
+        new ListAction(cAssociations.list, new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                JList list = (JList) e.getSource();
+                associationIsClicked(list.getSelectedValue().toString());
+            }
+        });
     }
 
     private void setFile(File file)
@@ -131,6 +164,7 @@ public class MainFrame extends JFrame
 
     public void setClasses(ArrayList<String> classes)
     {
+        this.unselectAllSubs();
         this.cClasses.clear();
         for (String sClass : classes)
         {
@@ -189,8 +223,35 @@ public class MainFrame extends JFrame
         }
     }
 
-    private void notifyActionToController(String componentName)
-    {
-        this.controller.componentWasClicked(componentName);
+//    private void notifyActionToController(String componentName)
+//    {
+//        this.controller.componentWasClicked(componentName);
+//    }
+    
+    private void classIsClicked(String className) {
+        unselectAllSubs();
+        this.controller.classWasClicked(className);
+    }
+    
+    private void attributeIsClicked(String attributeName) {
+        unselectAllSubs();
+        this.controller.attributeWasClicked(attributeName);
+    }
+    
+    private void methodIsClicked(String methodName) {
+        unselectAllSubs();
+        this.controller.methodWasClicked(methodName);
+    }
+    
+    private void associationIsClicked(String associationName) {
+        unselectAllSubs();
+        this.controller.associationWasClicked(associationName);
+    }
+    
+    private void unselectAllSubs(){
+        this.cAssociations.unselectAll();
+        this.cAttributes.unselectAll();
+        this.cMethods.unselectAll();
+        this.cSubClasses.unselectAll();
     }
 }

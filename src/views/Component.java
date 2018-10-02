@@ -59,6 +59,10 @@ public class Component
     {
         return this.pnl;
     }
+    
+    protected void unselectAll(){
+        this.list.clearSelection();
+    }
 
     protected void addElement(String s)
     {
