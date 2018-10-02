@@ -6,8 +6,13 @@ import models.aggregations.AggregationDeclaration;
 import models.classes.Class;
 import models.generalizations.Generalization;
 import models.relations.RelationDeclaration;
-import sun.text.normalizer.ReplaceableUCharacterIterator;
 
+/**
+ * Class representing a model in the file. Has a name and a list of classes
+ * 
+ * @author franc
+ *
+ */
 public class Model {
 
 	private String name;
@@ -18,13 +23,13 @@ public class Model {
 		super();
 		this.name = name;
 
-                ArrayList<ModelDeclaration> declarations = new ArrayList<>();
-		//ArrayList<Class> classes = new ArrayList<>();
+		ArrayList<ModelDeclaration> declarations = new ArrayList<>();
 		ArrayList<Generalization> generalizations = new ArrayList<>();
 		ArrayList<RelationDeclaration> relationDeclarations = new ArrayList<>();
 		ArrayList<AggregationDeclaration> aggregationDeclarations = new ArrayList<>();
 
 		ModelDeclaration declaration = null;
+//		Goes through all the lines of the model, to find classes, relations, etc.
 		for	(int i = 0 ; i < lines.size() ; i++) {
 			String line = lines.get(i);
 
@@ -52,34 +57,31 @@ public class Model {
 				if (declaration != null)
 					declaration.addLine(line);
 			}
-		}	
-		
+		}
+
+//		Once everything is identified, parse them.
 		for (ModelDeclaration decl : declarations) {
 			decl.parseLines();
 		}
-		
+
+//		Once everything knows what to do, apply the declarations to the existing classes
 		for (Generalization generalization : generalizations) {
-			generalization.applyGeneralisation(classes);
+			generalization.apply(this.classes);
 		}
-		
+
 		for (RelationDeclaration relationDecl : relationDeclarations) {
-			relationDecl.apply(classes);
+			relationDecl.apply(this.classes);
 		}
 
 		for (AggregationDeclaration aggregationDeclaration : aggregationDeclarations) {
-			aggregationDeclaration.apply(classes);
-		}
-		
-		for (ModelDeclaration decl : declarations) {
-			//System.out.println(decl.toString());
+			aggregationDeclaration.apply(this.classes);
 		}
 
 	}
 
 
+	public ArrayList<Class> getClasses(){
+		return this.classes;
+	}
 
-        public ArrayList<Class> getClasses(){
-            return this.classes;
-        }
-        
 }

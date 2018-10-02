@@ -46,7 +46,6 @@ public class UMLDecoder
             			fileModels.add(new Model(modelName, modelLines));
             		}
             		
-        			// set to this new line instead of null
         			modelName = line.replace("MODEL", "").trim();
         			modelLines = new ArrayList<>();
             	} else {

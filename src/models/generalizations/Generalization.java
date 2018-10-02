@@ -5,16 +5,24 @@ import java.util.ArrayList;
 import models.ModelDeclaration;
 import models.classes.Class;
 
+/**
+ * Parsing class to modify instances of class.
+ * @author franc
+ *
+ */
 public class Generalization extends ModelDeclaration {
 
 	ArrayList<String> strSubClasses = new ArrayList<>();
 	
 	public Generalization(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 	}
 	
-	public void applyGeneralisation(ArrayList<Class> classList) {
+	/**
+	 * Function that add subclasses to parent classes
+	 * @param classList
+	 */
+	public void apply(ArrayList<Class> classList) {
 		for (Class parentClass : classList) {
 			if (parentClass.getName().equals(this.name)) {
 				ArrayList<Class> subClasses = new ArrayList<>();

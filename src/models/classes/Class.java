@@ -6,28 +6,32 @@ import models.ModelDeclaration;
 import models.aggregations.Aggregation;
 import models.relations.Relation;
 
+/**
+ * Represent a class of the model. The relations, generalizations and aggregations declarations will
+ * modify instances of this class to represent the model.
+ * 
+ * Extends ModelDeclaration, because the model will create an instance and then add lines to the instance,
+ * so this instance must implement its own parsing function to reconize its attributes and methods.
+ * 
+ * @author franc
+ *
+ */
 public class Class extends ModelDeclaration
 {
 
+//	Basic class attributes
     private ArrayList<Attribute> attributes = new ArrayList<>();
     private ArrayList<Operation> operations = new ArrayList<>();
 
+//    Arrays that will be populated by other ModelDeclarations
     private ArrayList<Class> subClasses = new ArrayList<>();
-
     private ArrayList<Relation> relations = new ArrayList<>();
-
     private ArrayList<Aggregation> aggregations = new ArrayList<>();
-
-    /**
-     * Pas utile pour l'instant, mais j'estime qu'il soit possible que l'on en
-     * ait peu-etre besoin plus tard. peu-etre ;)
-     */
-    private Boolean parsed;
+    
 
     public Class(String name)
     {
         super(name);
-        this.parsed = false;
     }
 
     public String getName()
@@ -60,6 +64,7 @@ public class Class extends ModelDeclaration
         return aggregations;
     }
 
+//    Functions used by other ModelDeclarations to represent the model
     public void addRelation(Relation relation)
     {
         this.relations.add(relation);
@@ -70,13 +75,11 @@ public class Class extends ModelDeclaration
         this.aggregations.add(aggregation);
     }
 
-//	public void removeRelation(String relationName) {
-//		
-//	}
     public void setSubClasses(ArrayList<Class> subClasses)
     {
         this.subClasses = subClasses;
     }
+//    -------
 
     @Override
     public void parseLines()
@@ -110,7 +113,6 @@ public class Class extends ModelDeclaration
                 }
             }
         }
-        this.parsed = true;
     }
 
     @Override
@@ -129,7 +131,7 @@ public class Class extends ModelDeclaration
         }
 
 //		Impression des operations
-        str += "\tOp�rations:\n";
+        str += "\tOperations:\n";
         for (Operation ope : this.operations)
         {
             str += "\t\t" + String.format("%1$-10s", "{" + ope.getType() + "}") + ope.getName() + "(";

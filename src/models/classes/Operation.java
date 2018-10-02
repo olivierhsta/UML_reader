@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class representing an operation attribute for a class
+ * @author franc
+ *
+ */
 public class Operation {
 	
 	private String name;
@@ -17,25 +22,25 @@ public class Operation {
 		this.type = type;
 	}
 
-
 	public String getName() {
 		return name;
 	}
 
-
-
 	public ArrayList<Attribute> getParameters() {
 		return parameters;
 	}
-
-
 
 	public String getType() {
 		return type;
 	}
 
 
-
+	/**
+	 * Static function used to parse a string and extract the operation from it
+	 * 
+	 * @param str String to parse
+	 * @return attribute contained in the line | return null if nothing was found
+	 */
 	public static Operation extractOperationFromString(String str) {
 			
 		Pattern p = Pattern.compile("\\((.*)\\)");
