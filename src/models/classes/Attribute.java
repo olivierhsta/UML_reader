@@ -2,6 +2,15 @@ package models.classes;
 
 import java.util.ArrayList;
 
+/**
+ * Class representing a class attribute
+ * Has
+ * 		name
+ * 		type
+ * 
+ * @author franc
+ *
+ */
 public class Attribute {
 	
 	private String name;
@@ -18,14 +27,17 @@ public class Attribute {
 		return name;
 	}
 
-
-
 	public String getType() {
 		return type;
 	}
 
 
-
+	/**
+	 * Static function used to parse a line and extract the attributes from it
+	 * 
+	 * @param line String with the line to parse
+	 * @return List of Attributes contained in the line
+	 */
 	public static ArrayList<Attribute> extractAttributesFromString(String line) {
 		ArrayList<Attribute> attributes = new ArrayList<>();
 		

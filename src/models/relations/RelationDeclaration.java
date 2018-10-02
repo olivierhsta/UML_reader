@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import models.ModelDeclaration;
 import models.classes.Class;
 
+/**
+ * This class is only the parsing class used to find what must be modify from what class
+ * @author franc
+ *
+ */
 public class RelationDeclaration extends ModelDeclaration {
 
 	private ArrayList<String[]> roles = new ArrayList<>();
@@ -16,6 +21,10 @@ public class RelationDeclaration extends ModelDeclaration {
 		
 	}
 	
+	/**
+	 * Function that, knowing was to do after the parse, apply the modification to the instance of classes
+	 * @param classes
+	 */
 	public void apply(ArrayList<Class> classList) {
 		for (String[] role : this.roles) {
 			

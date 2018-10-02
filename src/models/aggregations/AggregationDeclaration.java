@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import models.ModelDeclaration;
 import models.classes.Class;
 
+/**
+ * This class is only the parsing class used to find what must be modify from what class
+ * @author franc
+ *
+ */
 public class AggregationDeclaration extends ModelDeclaration {
 	
 	private String containerLine = "";
@@ -14,6 +19,10 @@ public class AggregationDeclaration extends ModelDeclaration {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Function that, knowing was to do after the parse, apply the modification to the instance of classes
+	 * @param classes
+	 */
 	public void apply(ArrayList<Class> classes) {
 		String containerClassStr = this.containerLine.trim().split(" ")[1];
 		

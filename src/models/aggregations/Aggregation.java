@@ -2,11 +2,16 @@ package models.aggregations;
 
 import java.util.ArrayList;
 
+/**
+ * Class contained in each classes, with the information to be displayed
+ * 
+ * @author franc
+ *
+ */
 public class Aggregation {
 	
 	private String name = "P_";
 	private String details = "";
-//	private ArrayList<Class> parts = new ArrayList<>();
 
 	public Aggregation(ArrayList<String> lines) {
 		ArrayList<String> parts = new ArrayList<>();
