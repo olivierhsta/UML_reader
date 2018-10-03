@@ -23,7 +23,7 @@ public class RelationDeclaration extends ModelDeclaration {
 	
 	/**
 	 * Function that, knowing was to do after the parse, apply the modification to the instance of classes
-	 * @param classes
+	 * @param classList
 	 */
 	public void apply(ArrayList<Class> classList) {
 		for (String[] role : this.roles) {
