@@ -1,11 +1,9 @@
 package controllers;
 
-import com.sun.nio.sctp.Association;
 import views.MainFrame;
 
 import java.io.File;
 import java.util.ArrayList;
-import models.ModelDeclaration;
 import models.classes.Class;
 import models.Model;
 
@@ -15,16 +13,36 @@ import models.classes.Attribute;
 import models.classes.Operation;
 import models.relations.Relation;
 
+/**
+ * Controller class that makes the bridge between the model and the view
+ * @author olivi
+ */
 public class UMLController
 {
-
+    /**
+     * Entry point to the backend
+     */
     private UMLDecoder model;
+    /**
+     * Entry point to the frontend
+     */
     private MainFrame view;
-    private Class currentClass = null;
+    private Class currentClass = null;  // when a class is clicked, remember its instance
 
-    public UMLController()
-    {
-
+    /**
+     * Empty constructor.  When this controller is used, the view and model are
+     * expected to be set afterwards
+     */
+    public UMLController() {}
+    
+    /**
+     * Constructor receiving view and model. 
+     * @param view Instance of MainFrame used as view
+     * @param model Instance of UMLDecoder used as model
+     */
+    public UMLController(MainFrame view, UMLDecoder model){
+        this.view = view;
+        this.model = model;
     }
 
     public void setModel(UMLDecoder model)
@@ -47,16 +65,23 @@ public class UMLController
         return this.view;
     }
 
+    /**
+     * Generates the model encoded in a UML file.
+     * @param file File containing the UML model
+     */
     public void generateModel(File file)
     {
         this.model.setFile(file);
-        this.setClasses(this.model.getUMLModels());
+        this.displayClasses();
     }
 
-    public void setClasses(ArrayList<Model> models)
+    /**
+     * Displays the classes of the model.
+     */
+    public void displayClasses()
     {
         ArrayList<String> classes = new ArrayList<String>();
-        for (Model model : models)
+        for (Model model : this.model.getUMLModels())
         {
             ArrayList<Class> listClasses = model.getClasses();
             for (Class mClass : listClasses)
@@ -64,147 +89,120 @@ public class UMLController
                 classes.add(mClass.getName());
             }
         }
-        this.view.setClasses(classes);
+        this.view.displayClasses(classes);
     }
     
+    /**
+     * Get the descriptive elements of a given class and display them.
+     * Will display attributes, methods, associations, aggregations and subclasses
+     * @param className Name of the class which was clicked
+     */
     public void classWasClicked(String className) {
-        ArrayList<String> elementNames = new ArrayList();
-        
+                
         Class clickedElement = null;
         for (Class mClass : this.model.getUMLModels().get(0).getClasses())
         {
             if (className.equals(mClass.getName()))
             {
                 clickedElement = mClass;
-                break; // for now, if there is more than one component with the same name, the first one will always be the chosen one
+                break; // we assume that there is only one class with the same name
             }
         }
         
-        this.currentClass = clickedElement;
+        this.currentClass = clickedElement;  // remember the current class
+        
+        
+        /* --- Get and display the descriptive elements ---*/
+        ArrayList<String> elementNames = new ArrayList();
         
         for (Attribute attribute : clickedElement.getAttributes())
         {
             elementNames.add(attribute.getName());
         }
-        this.view.setAttributes(elementNames);
+        this.view.displayAttributes(elementNames);
         elementNames.clear();
 
         for (Class subClass : clickedElement.getSubClasses())
         {
             elementNames.add(subClass.getName());
         }
-        this.view.setSubClasses(elementNames);
+        this.view.displaySubClasses(elementNames);
         elementNames.clear();
 
         for (Operation operation : clickedElement.getOperations())
         {
             System.out.println(operation.getName());
         }
-        this.view.setMethods(elementNames);
+        this.view.displayMethods(elementNames);
         elementNames.clear();
 
         for (Aggregation aggreagation : clickedElement.getAggregations())
         {
             elementNames.add(aggreagation.getName());
         }
+        this.view.displayAggregations(elementNames);
+        elementNames.clear();
+        
         for (Relation relation : clickedElement.getRelations())
         {
             elementNames.add(relation.getName());
         }
-        this.view.setAssociations(elementNames);
+        this.view.displayAssociations(elementNames);
         elementNames.clear();
     }
     
+    /**
+     * Get and display the details of the attribute if there is some.
+     * As of now, attributes have no details.
+     * @param attributeName Name of an attribute stored in the class' attributes list
+     */
     public void attributeWasClicked(String attributeName){
-        this.view.setDetails("");
+        this.view.displayDetails("");
         for (Attribute attribute : this.currentClass.getAttributes()){
             if (attribute.getName().equals(attributeName)){
-                this.view.setDetails("");
+                this.view.displayDetails("");
             }
         }
     }
     
+    /**
+     * Get and display the details of the method if there is some.
+     * As of now, methods have no details.
+     * @param methodName Name of a method stored in the class' methods list
+     */
     public void methodWasClicked(String methodName){
-        this.view.setDetails("");
+        this.view.displayDetails("");
         for (Operation method : this.currentClass.getOperations()){
             if (method.getName().equals(methodName)){
-                this.view.setDetails("");
+                this.view.displayDetails("");
             }
         }
     }
     
+    /**
+     * Get and display the details of the association if there is some.
+     * @param associationName Name of an association stored in the class' association list
+     */
     public void associationWasClicked(String associationName){
-        this.view.setDetails("");
+        this.view.displayDetails("");
         for (Relation association : this.currentClass.getRelations()){
             if (association.getName().equals(associationName)){
-                this.view.setDetails(association.getDetails());
-            }
-        }
-        
-        for (Aggregation aggregation : this.currentClass.getAggregations()){
-            if (aggregation.getName().equals(associationName)){
-                this.view.setDetails(aggregation.getDetails());
+                this.view.displayDetails(association.getDetails());
             }
         }
     }
-//
-//    public void componentWasClicked(String componentName)
-//    {
-//        // This takes the UMLModel 0 because, for now, we only expect one model per file
-//        ArrayList<ModelDeclaration> declarations = this.model.getUMLModels().get(0).getModelDeclarations();
-//        ModelDeclaration clickedElement = null;
-//        for (ModelDeclaration declaration : declarations)
-//        {
-//            if (declaration.getName().equals(componentName))
-//            {
-//                clickedElement = declaration;
-//                break; // for now, if there is more than one component with the same name, the first one will always be the chosen one
-//            }
-//        }
-//
-//        ArrayList<String> elementNames = new ArrayList<String>();
-//
-//        if (clickedElement == null)
-//        {
-//            this.view.setDetails("");
-//        } else if (clickedElement instanceof Class)
-//        {
-//            this.view.selectElementFromClassList(((Class) clickedElement).getName());
-//            for (Attribute attribute : ((Class) clickedElement).getAttributes())
-//            {
-//                elementNames.add(attribute.getName());
-//            }
-//            this.view.setAttributes(elementNames);
-//            elementNames.clear();
-//
-//            for (Class subClass : ((Class) clickedElement).getSubClasses())
-//            {
-//                elementNames.add(subClass.getName());
-//            }
-//            this.view.setSubClasses(elementNames);
-//            elementNames.clear();
-//
-//            for (Operation operation : ((Class) clickedElement).getOperations())
-//            {
-//                System.out.println(operation.getName());
-//            }
-//            this.view.setMethods(elementNames);
-//            elementNames.clear();
-//
-//            for (Aggregation aggreagation : ((Class) clickedElement).getAggregations())
-//            {
-//                elementNames.add(aggreagation.getName());
-//            }
-//            for (Relation relation : ((Class) clickedElement).getRelations())
-//            {
-//                elementNames.add(relation.getName());
-//            }
-//            this.view.setAssociations(elementNames);
-//            elementNames.clear();
-//        } else 
-//        {
-//            this.view.setDetails(clickedElement.getDetails());
-//        }
-//    }
-
+    
+    /**
+     * Get and display the details of the association if there is some.
+     * @param aggregationName Name of an aggregation stored in the class' aggregation list
+     */
+    public void aggregationWasClicked(String aggregationName){
+        this.view.displayDetails("");
+        
+        for (Aggregation aggregation : this.currentClass.getAggregations()){
+            if (aggregation.getName().equals(aggregationName)){
+                this.view.displayDetails(aggregation.getDetails());
+            }
+        }
+    }
 }
