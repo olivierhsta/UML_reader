@@ -6,7 +6,7 @@ import views.MainFrame;
 
 public class main
 {
-
+    
     public static void main(String[] args)
     {
         UMLController controller = new UMLController();

@@ -28,17 +28,15 @@ public class FileInputComponent extends Component
      */
     public FileInputComponent(String btnText, String taText)
     {
-        super();
-
-        super.pnl = new JPanel(new FlowLayout());
+        this.pnl = new JPanel(new FlowLayout());
 
         this.btnFileSelect = new JButton(btnText);
 
         this.ta = new JTextArea(taText, 2, 40);
         this.ta.setEditable(false);
         this.sp = new JScrollPane(this.ta);
-        super.pnl.add(this.btnFileSelect);
-        super.pnl.add(this.sp);
+        this.pnl.add(this.btnFileSelect);
+        this.pnl.add(this.sp);
 
         this.file = null;
     }
@@ -61,6 +59,12 @@ public class FileInputComponent extends Component
     public void setListener(ActionListener actionListener)
     {
         this.btnFileSelect.addActionListener(actionListener);
+    }
+    
+    @Override
+    public void clear(){
+        this.file = null;
+        this.ta.setText("");
     }
 
 }

@@ -12,8 +12,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
+
+import main.config;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -94,7 +95,7 @@ public class MainFrame extends JFrame
 
         this.add(this.pnl);
 
-        this.setTitle("UML Reader");
+        this.setTitle(config.PROJECT_NAME);
         this.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setPreferredSize(new Dimension(5 * dim.width / 9, 2 * dim.height / 3));
@@ -109,7 +110,9 @@ public class MainFrame extends JFrame
     {
         this.cFileInput.setListener((ActionEvent e) ->
         {
-            FileChooser fileChooser = new FileChooser("uml", "ucd");
+            
+            FileChooser fileChooser = new FileChooser(config.ACCEPTED_EXTENSIONS);
+            clearData();
             if (!fileChooser.isValid())
             {
                 JOptionPane.showMessageDialog(null, "Invalid file type");
@@ -351,5 +354,16 @@ public class MainFrame extends JFrame
         this.cAttributes.unselectAll();
         this.cMethods.unselectAll();
         this.cSubClasses.unselectAll();
+    }
+    
+    private void clearData(){
+        this.cFileInput.clear();
+        this.cAggregations.clear();
+        this.cAssociations.clear();
+        this.cAttributes.clear();
+        this.cMethods.clear();
+        this.cSubClasses.clear();
+        this.cClasses.clear();
+        this.cDetails.clear();
     }
 }

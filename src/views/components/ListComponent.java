@@ -24,8 +24,9 @@ import javax.swing.JScrollPane;
 public class ListComponent extends Component
 {
 
-    protected JList list;
-    protected JScrollPane sp;
+    private JList list;
+    private JLabel lbl;
+    private JScrollPane sp;
     private CustomListModel listModel;
     private ArrayList<String> listModelString = new ArrayList<String>();
 
@@ -123,6 +124,7 @@ public class ListComponent extends Component
     /**
      * Deletes all the entry in the list.
      */
+    @Override
     public void clear()
     {
         this.listModelString.clear();

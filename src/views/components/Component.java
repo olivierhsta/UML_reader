@@ -9,11 +9,10 @@ import javax.swing.JPanel;
  * Meant to be extended.  Only declares a JPanel and a JLabel.
  * @author olivi
  */
-public class Component
+public abstract class Component
 {
 
     protected JPanel pnl;
-    protected JLabel lbl;
     
     /**
      * Sole constructor. (For invocation by subclass 
@@ -30,5 +29,11 @@ public class Component
     {
         return this.pnl;
     }
+    
+    /**
+     * Clear the data from the Component.
+     * Must be defined by subclasses.
+     */
+    public abstract void clear();
 
 }

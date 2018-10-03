@@ -131,7 +131,7 @@ public class UMLController
 
         for (Operation operation : clickedElement.getOperations())
         {
-            System.out.println(operation.getName());
+            elementNames.add(operation.getName());
         }
         this.view.displayMethods(elementNames);
         elementNames.clear();
@@ -160,7 +160,7 @@ public class UMLController
         this.view.displayDetails("");
         for (Attribute attribute : this.currentClass.getAttributes()){
             if (attribute.getName().equals(attributeName)){
-                this.view.displayDetails("");
+                this.view.displayDetails(attribute.getDetails());
             }
         }
     }
@@ -174,7 +174,7 @@ public class UMLController
         this.view.displayDetails("");
         for (Operation method : this.currentClass.getOperations()){
             if (method.getName().equals(methodName)){
-                this.view.displayDetails("");
+                this.view.displayDetails(method.getDetails());
             }
         }
     }

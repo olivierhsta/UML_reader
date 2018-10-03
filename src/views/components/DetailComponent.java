@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 public class DetailComponent extends Component
 {
     private JTextArea ta;
+    private JLabel lbl;
     private JScrollPane sp;
 
     /**
@@ -42,13 +43,13 @@ public class DetailComponent extends Component
      * @param taText Component's text area text (pass "" for empty text area)
      */
     private void newDetailComponent(String label, String taText) {
-        super.pnl = new JPanel(new BorderLayout());
-        super.lbl = new JLabel(label);
+        this.pnl = new JPanel(new BorderLayout());
+        this.lbl = new JLabel(label);
         this.ta = new JTextArea("", 5,60);
         this.ta.setEditable(false);
         this.sp = new JScrollPane(this.ta);
-        super.pnl.add(super.lbl, BorderLayout.NORTH);
-        super.pnl.add(this.sp, BorderLayout.CENTER);
+        this.pnl.add(this.lbl, BorderLayout.NORTH);
+        this.pnl.add(this.sp, BorderLayout.CENTER);
     }
     
     /**
@@ -73,8 +74,9 @@ public class DetailComponent extends Component
     }
 
     /**
-     * Delete the text in the DetailComponent's text area
+     * Delete the text in the DetailComponent's text area.
      */
+    @Override
     public void clear()
     {
         this.ta.setText("");

@@ -33,6 +33,18 @@ public class Operation {
 	public String getType() {
 		return type;
 	}
+        
+        public String getDetails(){
+            String details = this.type;
+            for (Attribute parameter : parameters){
+                if (details.equals(this.type)){
+                    details += "\nParameters : " + parameter.getName() + "(" + parameter.getType() + ")\n";
+                } else {
+                    details += "    " + parameter.getName() + "(" + parameter.getType() + ")\n";
+                }
+            }
+            return details;
+        }
 
 
 	/**
