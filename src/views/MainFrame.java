@@ -23,6 +23,7 @@ import controllers.UMLController;
 import java.util.ArrayList;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import views.components.LabelComponent;
 import views.components.ListComponent;
 
 /**
@@ -35,8 +36,9 @@ public class MainFrame extends JFrame
     private UMLController controller;
     private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations;
     private FileInputComponent cFileInput;
+    private LabelComponent cModelLabel;
     private DetailComponent cDetails;
-    private JPanel pnl, pnlElement;
+    private JPanel pnl, pnlElement, pnlHeader;
 
     /**
      * Constructor of the main frame. The frame contains a FileInput field, and
@@ -57,6 +59,7 @@ public class MainFrame extends JFrame
         this.controller = controller;
 
         this.cFileInput = new FileInputComponent("Select File", null);
+        this.cModelLabel = new LabelComponent("");
 
         this.cClasses = new ListComponent("Classes", 200, 100);
         this.cAttributes = new ListComponent("Attributes");
@@ -79,17 +82,21 @@ public class MainFrame extends JFrame
     {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(2 * dim.width / 9, dim.height / 6);
-
+        
         this.pnl = new JPanel(new BorderLayout());
+        this.pnlHeader = new JPanel(new BorderLayout());
         this.pnlElement = new JPanel(new GridLayout(3, 2));
 
+        this.pnlHeader.add(this.cModelLabel.toDisplay(), BorderLayout.WEST);
+        this.pnlHeader.add(this.cFileInput.toDisplay(), BorderLayout.CENTER);
+        
         this.pnlElement.add(this.cAttributes.toDisplay());
         this.pnlElement.add(this.cMethods.toDisplay());
         this.pnlElement.add(this.cAssociations.toDisplay());
         this.pnlElement.add(this.cAggregations.toDisplay());
         this.pnlElement.add(this.cSubClasses.toDisplay());
 
-        this.pnl.add(this.cFileInput.toDisplay(), BorderLayout.NORTH);
+        this.pnl.add(this.pnlHeader, BorderLayout.NORTH);
         this.pnl.add(this.cClasses.toDisplay(), BorderLayout.WEST);
         this.pnl.add(this.pnlElement, BorderLayout.CENTER);
         this.pnl.add(this.cDetails.toDisplay(), BorderLayout.SOUTH);
@@ -212,6 +219,15 @@ public class MainFrame extends JFrame
     {
         this.cDetails.clear();
         this.cDetails.addElement(detail);
+    }
+    
+    /**
+     * Display the UML Model name in the label on the top left.
+     * @param name Name of the UML Model.
+     */
+    public void displayModelName(String name)
+    {
+        this.cModelLabel.setText(name);
     }
 
     /**
@@ -376,6 +392,7 @@ public class MainFrame extends JFrame
     private void clearData()
     {
         this.cFileInput.clear();
+        this.cModelLabel.clear();
         this.cAggregations.clear();
         this.cAssociations.clear();
         this.cAttributes.clear();

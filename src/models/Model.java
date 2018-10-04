@@ -83,5 +83,9 @@ public class Model {
 	public ArrayList<Class> getClasses(){
 		return this.classes;
 	}
+        
+        public String getName(){
+            return this.name;
+        }
 
 }
