@@ -49,6 +49,7 @@ public class MainFrame extends JFrame
      * <li>Aggregations</li>
      * <li>SubClasses</li>
      * </ul>
+     *
      * @param controller This running instance's controller.
      */
     public MainFrame(UMLController controller)
@@ -110,15 +111,21 @@ public class MainFrame extends JFrame
     {
         this.cFileInput.setListener((ActionEvent e) ->
         {
-            
+
             FileChooser fileChooser = new FileChooser(config.ACCEPTED_EXTENSIONS);
             clearData();
-            if (!fileChooser.isValid())
+            if (!fileChooser.isCancel())
             {
-                JOptionPane.showMessageDialog(null, "Invalid file type");
-            } else if (!fileChooser.isCancel())
-            {
-                setFile(fileChooser.getFile());
+                if (!fileChooser.isValid())
+                {
+                    alert("Invalid file type");
+                } else if (fileChooser.isEmpty())
+                {
+                    alert("The file is empty");
+                } else
+                {
+                    setFile(fileChooser.getFile());
+                }
             }
         });
 
@@ -169,6 +176,16 @@ public class MainFrame extends JFrame
     {
         this.cFileInput.setFile(file);
         this.controller.generateModel(file);
+    }
+
+    /**
+     * Affiche une alerte.
+     *
+     * @param message Chaine de caractère à afficher dans l'alerte.
+     */
+    public void alert(String message)
+    {
+        JOptionPane.showMessageDialog(null, message);
     }
 
     /**
@@ -355,8 +372,9 @@ public class MainFrame extends JFrame
         this.cMethods.unselectAll();
         this.cSubClasses.unselectAll();
     }
-    
-    private void clearData(){
+
+    private void clearData()
+    {
         this.cFileInput.clear();
         this.cAggregations.clear();
         this.cAssociations.clear();

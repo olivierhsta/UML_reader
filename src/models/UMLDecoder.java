@@ -54,7 +54,7 @@ public class UMLDecoder
             	
             }
             
-            if (!modelName.isEmpty())
+            if (modelName != null && !modelName.isEmpty())
             	fileModels.add(new Model(modelName, modelLines));
             
 

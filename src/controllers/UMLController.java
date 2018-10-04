@@ -71,8 +71,19 @@ public class UMLController
      */
     public void generateModel(File file)
     {
+        this.model=new UMLDecoder(this);
         this.model.setFile(file);
-        this.displayClasses();
+        if (!this.model.getUMLModels().isEmpty()){
+            if (!this.model.getUMLModels().get(0).getClasses().isEmpty()){
+                this.displayClasses();
+            } else {
+                this.view.alert("Model is not well formated");
+            }
+        } else {
+            this.view.alert("No Model declared in the given file.  Make sure the"
+                    + " Model follows the UML standards.");
+        }
+        
     }
 
     /**
