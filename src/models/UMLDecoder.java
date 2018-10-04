@@ -53,7 +53,9 @@ public class UMLDecoder
             	}
             	
             }
-            fileModels.add(new Model(modelName, modelLines));
+            
+            if (!modelName.isEmpty())
+            	fileModels.add(new Model(modelName, modelLines));
             
 
             // Always close files.
