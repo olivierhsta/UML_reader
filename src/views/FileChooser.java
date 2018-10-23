@@ -40,6 +40,7 @@ public class FileChooser
                 sAcceptedExtensions, this.acceptedExtensions
         );
 
+        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         chooser.setFileFilter(filter);
 
         int result = chooser.showSaveDialog(null);
