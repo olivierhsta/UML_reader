@@ -53,8 +53,8 @@ public class Attribute {
 		return attributes;
 	}
         
-        public String getDetails(){
-            return this.type;
-        }
+    public String getDetails(){
+        return this.type;
+    }
 
 }

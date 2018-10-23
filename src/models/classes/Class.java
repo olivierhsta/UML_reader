@@ -33,6 +33,16 @@ public class Class extends ModelDeclaration
     {
         super(name);
     }
+    
+    public int getAna() {
+    	int nbParam = 0;
+    	
+    	for (Operation op : this.operations) {
+    		nbParam += op.getParameters().size();
+    	}    	
+    	
+    	return nbParam / this.operations.size();
+    }
 
     public String getName()
     {
