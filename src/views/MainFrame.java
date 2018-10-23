@@ -5,7 +5,6 @@
  */
 package views;
 
-import views.components.DetailComponent;
 import views.components.FileInputComponent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,8 +22,10 @@ import controllers.UMLController;
 import java.util.ArrayList;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import views.components.ButtonComponent;
 import views.components.LabelComponent;
 import views.components.ListComponent;
+import views.components.TextAreaComponent;
 
 /**
  *
@@ -34,10 +35,11 @@ public class MainFrame extends JFrame
 {
 
     private UMLController controller;
-    private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations;
+    private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations, cMetrics;
     private FileInputComponent cFileInput;
     private LabelComponent cModelLabel;
-    private DetailComponent cDetails;
+    private TextAreaComponent cDetails;
+    private ButtonComponent cCalculateMetrics;
     private JPanel pnl, pnlElement, pnlHeader;
 
     /**
@@ -60,6 +62,7 @@ public class MainFrame extends JFrame
 
         this.cFileInput = new FileInputComponent("Select File", null);
         this.cModelLabel = new LabelComponent("");
+        this.cCalculateMetrics = new ButtonComponent("Calculate Metrics");
 
         this.cClasses = new ListComponent("Classes", 200, 100);
         this.cAttributes = new ListComponent("Attributes");
@@ -67,8 +70,9 @@ public class MainFrame extends JFrame
         this.cSubClasses = new ListComponent("SubClasses");
         this.cAssociations = new ListComponent("Associations");
         this.cAggregations = new ListComponent("Aggregations");
+        this.cMetrics = new ListComponent("Metriques");
 
-        this.cDetails = new DetailComponent("Details");
+        this.cDetails = new TextAreaComponent("Details");
 
         this.render();
         this.declareListeners();
@@ -89,6 +93,7 @@ public class MainFrame extends JFrame
 
         this.pnlHeader.add(this.cModelLabel.toDisplay(), BorderLayout.WEST);
         this.pnlHeader.add(this.cFileInput.toDisplay(), BorderLayout.CENTER);
+        this.pnlHeader.add(this.cCalculateMetrics.toDisplay(), BorderLayout.EAST);
         
         this.pnlElement.add(this.cAttributes.toDisplay());
         this.pnlElement.add(this.cMethods.toDisplay());
@@ -98,6 +103,7 @@ public class MainFrame extends JFrame
 
         this.pnl.add(this.pnlHeader, BorderLayout.NORTH);
         this.pnl.add(this.cClasses.toDisplay(), BorderLayout.WEST);
+        this.pnl.add(this.cMetrics.toDisplay(), BorderLayout.EAST);
         this.pnl.add(this.pnlElement, BorderLayout.CENTER);
         this.pnl.add(this.cDetails.toDisplay(), BorderLayout.SOUTH);
 
@@ -169,7 +175,12 @@ public class MainFrame extends JFrame
         this.cAggregations.setListener((ActionEvent e) ->
         {
             JList list = (JList) e.getSource();
-            associationIsClicked(list.getSelectedValue().toString());
+            aggregationIsClicked(list.getSelectedValue().toString());
+        });
+        
+        this.cCalculateMetrics.setListener((ActionEvent e) ->
+        {
+            calculateMetricsIsClicked();
         });
     }
 
@@ -299,6 +310,18 @@ public class MainFrame extends JFrame
             this.cAggregations.addElement(aggregation);
         }
     }
+    
+    /**
+     * Display a list of String in the Metrics field.
+     * @param metrics Elements to display
+     */
+    public void displayMetrics(ArrayList<String> metrics)
+    {
+        for (String metric : metrics)
+        {
+            this.cMetrics.addElement(metric);
+        }
+    }
 
     /**
      * Manually select an element from the class list. This only highlights the
@@ -376,6 +399,16 @@ public class MainFrame extends JFrame
         unselectAllSubs();
         this.controller.aggregationWasClicked(aggregationName);
     }
+    
+    /**
+     * Clears the metrics fields and notify the controller when the 
+     * calculateMetrics component is clicked
+     */
+    private void calculateMetricsIsClicked()
+    {
+        this.cMetrics.clear();
+        this.controller.calculateMetricsWasClicked();
+    }
 
     /**
      * Unselect every list element except for the class' list
@@ -389,6 +422,9 @@ public class MainFrame extends JFrame
         this.cSubClasses.unselectAll();
     }
 
+    /**
+     * Clears everything
+     */
     private void clearData()
     {
         this.cFileInput.clear();
@@ -400,5 +436,6 @@ public class MainFrame extends JFrame
         this.cSubClasses.clear();
         this.cClasses.clear();
         this.cDetails.clear();
+        this.cMetrics.clear();
     }
 }

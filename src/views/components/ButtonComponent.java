@@ -5,44 +5,56 @@
  */
 package views.components;
 
-import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 
 /**
  * Component for displaying a simple label.
  * @author olivi
  */
-public class LabelComponent extends Component
+public class ButtonComponent extends Component implements Listenable
 {
 
-    private JLabel lbl;
+    private JButton btn;
 
     /**
-     * Constructor of LabelComponent.
-     * Initialize a JLabel and adds it to the panel.
-     * @param labelText Text to display on the label
+     * Constructor of ButtonComponent.
+     * Initialize a JButton and adds it to the panel.
+     * @param btnText Text to display on the button
      */
-    public LabelComponent(String labelText)
+    public ButtonComponent(String btnText)
     {
-        this.lbl = new JLabel(labelText);
-        this.pnl.add(lbl);
+        this.btn = new JButton(btnText);
+        this.pnl.add(btn);
     }
 
     /**
-     * Empty the label text.
+     * Does nothing (to satisfy parent constraint)
      */
     @Override
     public void clear()
     {
-        this.lbl.setText("");
+        // do nothing
+        // QUESTION : worth changing?
+    }
+    
+    /**
+     * Sets the button listener.
+     * @param al Action to execute upon click.
+     */
+    @Override
+    public void setListener(ActionListener al)
+    {
+        this.btn.addActionListener(al);
     }
 
     /**
-     * Set the text of the label
-     * @param labelText Text to display.
+     * Set the text of the button
+     * @param btnText Text to display.
      */
-    public void setText(String labelText)
+    public void setText(String btnText)
     {
-        this.lbl.setText(labelText);
+        this.btn.setText(btnText);
     }
 
 }

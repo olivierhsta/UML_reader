@@ -4,8 +4,8 @@ import views.MainFrame;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import models.classes.Class;
-import models.Model;
 
 import models.UMLDecoder;
 import models.aggregations.Aggregation;
@@ -253,5 +253,16 @@ public class UMLController
                 this.view.displayDetails(aggregation.getDetails());
             }
         }
+    }
+    
+    /**
+     * Ask the model to generate the metrics and sends the results to the view
+     */
+    public void calculateMetricsWasClicked()
+    {
+        // TODO
+        ArrayList<String> metrics = new ArrayList();
+        metrics.add("1");
+        this.view.displayMetrics(metrics);
     }
 }

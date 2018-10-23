@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
  * More generally, this Component contains a JLabel above a non-editable JTextArea.
  * @author olivi
  */
-public class DetailComponent extends Component
+public class TextAreaComponent extends Component
 {
     private JTextArea ta;
     private JLabel lbl;
@@ -21,9 +21,9 @@ public class DetailComponent extends Component
      * Constructor to instantiate a DetailComponent with empty text area.
      * @param label Component label
      */
-    public DetailComponent(String label)
+    public TextAreaComponent(String label)
     {
-        this.newDetailComponent(label, "");
+        this.newTextAreaComponent(label, "");
     }
 
     /**
@@ -31,9 +31,9 @@ public class DetailComponent extends Component
      * @param label Component label
      * @param taText Component's text area text
      */
-    public DetailComponent(String label, String taText)
+    public TextAreaComponent(String label, String taText)
     {
-        this.newDetailComponent(label, taText);
+        this.newTextAreaComponent(label, taText);
     }
     
     /**
@@ -42,10 +42,10 @@ public class DetailComponent extends Component
      * @param label Component label
      * @param taText Component's text area text (pass "" for empty text area)
      */
-    private void newDetailComponent(String label, String taText) {
+    private void newTextAreaComponent(String label, String taText) {
         this.pnl = new JPanel(new BorderLayout());
         this.lbl = new JLabel(label);
-        this.ta = new JTextArea("", 5,60);
+        this.ta = new JTextArea(taText, 5,60);
         this.ta.setEditable(false);
         this.sp = new JScrollPane(this.ta);
         this.pnl.add(this.lbl, BorderLayout.NORTH);
@@ -70,7 +70,14 @@ public class DetailComponent extends Component
     public void addElement(String text)
     {
         String current = this.ta.getText();
-        this.ta.setText(current + "\n" + text);
+        if (current.equals(""))
+        {
+            this.ta.setText(text);
+        }
+        else
+        {
+            this.ta.setText(current + "\n" + text);
+        }
     }
 
     /**
