@@ -15,12 +15,12 @@ public class FileChooser
 
     private File selectedFile;
     private String[] acceptedExtensions;
-    private boolean cancelled = false, valid = true;
+    private boolean cancelled = false;
 
     /**
-     * Constructor of FileChooser.
-     * Display a {@link JFileChooser}
-     * @param acceptedExtensions 
+     * Constructor of FileChooser. Display a {@link JFileChooser}
+     *
+     * @param acceptedExtensions
      */
     protected FileChooser(String... acceptedExtensions)
     {
@@ -51,18 +51,6 @@ public class FileChooser
             // it's the user responsability to verify the validity if needed
             this.selectedFile = chooser.getSelectedFile();
 
-            String[] parts = chooser.getSelectedFile().getPath().split("\\.");
-            if (parts.length <= 1)
-            {
-                this.valid = false;
-            } else
-            {
-                String extension = parts[parts.length - 1];
-                if (!Arrays.asList(this.acceptedExtensions).contains(extension))
-                {
-                    this.valid = false;
-                }
-            }
         } else if (result == JFileChooser.CANCEL_OPTION)
         {
             this.cancelled = true;
@@ -70,10 +58,10 @@ public class FileChooser
     }
 
     /**
-     * Getter for the file selected by the user.
-     * This returns the file even if it does not match the extension(s) given 
-     * at class instantiation.  A validity verification is provided at 
-     * {@link isValid()}
+     * Getter for the file selected by the user. This returns the file even if
+     * it does not match the extension(s) given at class instantiation. A
+     * validity verification is provided at {@link isValid()}
+     *
      * @return The file selected by the user.
      */
     protected File getFile()
@@ -83,7 +71,7 @@ public class FileChooser
 
     /**
      * Checks if the operation was canceled.
-     * 
+     *
      * @return <code>true</code> if the user clicked the "Cancel" button,
      * <code>false</code> if he clicked the "Save" button
      */
@@ -93,11 +81,37 @@ public class FileChooser
     }
 
     /**
-     * Checks if the chosen file's extension was in the list given at instantiation.
-     * @return 
+     * Checks if the chosen file's extension was in the list given at
+     * instantiation.
+     *
+     * @return true if the file extension is valid, false otherwise
      */
     protected boolean isValid()
     {
-        return this.valid;
+        if (this.selectedFile == null) {
+            return false;
+        }
+        String[] parts = this.selectedFile.getPath().split("\\.");
+        if (parts.length <= 1)
+        {
+            return false;
+        } else
+        {
+            String extension = parts[parts.length - 1];
+            if (!Arrays.asList(this.acceptedExtensions).contains(extension))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the file is empty.
+     * @return true if the file is empty, false otherwise
+     */
+    protected boolean isEmpty()
+    {
+        return (this.selectedFile.length() <= 0);
     }
 }

@@ -13,6 +13,6 @@ public class config
 {
     
     public final static String PROJECT_NAME = "UML Reader";
-    public final static String[] ACCEPTED_EXTENSIONS = {"uml","ucd"};
+    public final static String[] ACCEPTED_EXTENSIONS = {"ucd"};
     
 }
