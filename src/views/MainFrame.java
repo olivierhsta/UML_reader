@@ -19,11 +19,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import controllers.UMLController;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Set;
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import views.components.ButtonComponent;
-import views.components.LabelComponent;
+import views.components.DropdownComponent;
 import views.components.ListComponent;
 import views.components.TextAreaComponent;
 
@@ -37,7 +40,7 @@ public class MainFrame extends JFrame
     private UMLController controller;
     private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations, cMetrics;
     private FileInputComponent cFileInput;
-    private LabelComponent cModelLabel;
+    private DropdownComponent cModelsNames;
     private TextAreaComponent cDetails;
     private ButtonComponent cCalculateMetrics;
     private JPanel pnl, pnlElement, pnlHeader;
@@ -61,7 +64,7 @@ public class MainFrame extends JFrame
         this.controller = controller;
 
         this.cFileInput = new FileInputComponent("Select File", null);
-        this.cModelLabel = new LabelComponent("");
+        this.cModelsNames = new DropdownComponent("Models");
         this.cCalculateMetrics = new ButtonComponent("Calculate Metrics");
 
         this.cClasses = new ListComponent("Classes", 200, 100);
@@ -91,7 +94,7 @@ public class MainFrame extends JFrame
         this.pnlHeader = new JPanel(new BorderLayout());
         this.pnlElement = new JPanel(new GridLayout(3, 2));
 
-        this.pnlHeader.add(this.cModelLabel.toDisplay(), BorderLayout.WEST);
+        this.pnlHeader.add(this.cModelsNames.toDisplay(), BorderLayout.WEST);
         this.pnlHeader.add(this.cFileInput.toDisplay(), BorderLayout.CENTER);
         this.pnlHeader.add(this.cCalculateMetrics.toDisplay(), BorderLayout.EAST);
         
@@ -140,6 +143,12 @@ public class MainFrame extends JFrame
                     setFile(fileChooser.getFile());
                 }
             }
+        });
+        
+        this.cModelsNames.setListener((ActionEvent e) ->
+        {
+            JComboBox cb = (JComboBox) e.getSource();
+            modelIsClicked(cb.getSelectedItem().toString());
         });
 
         this.cClasses.setListener((ActionEvent e) ->
@@ -211,7 +220,7 @@ public class MainFrame extends JFrame
      *
      * @param classes Elements to display
      */
-    public void displayClasses(ArrayList<String> classes)
+    public void displayClasses(Set<String> classes)
     {
         this.unselectAllSubs();
         this.cClasses.clear();
@@ -234,11 +243,25 @@ public class MainFrame extends JFrame
     
     /**
      * Display the UML Model name in the label on the top left.
-     * @param name Name of the UML Model.
+     * @param names Name of the UML Models.
+     * @param current Model to be selected by default
      */
-    public void displayModelName(String name)
+    public void displayModelsNames(Set<String> names, String current)
     {
-        this.cModelLabel.setText(name);
+        boolean currentValid = false;
+        for (String name : names)
+        {
+            if (name.equals(current))
+            {
+                currentValid = true;
+            }
+            this.cModelsNames.addElement(name);
+        }
+        
+        if (currentValid)
+        {
+            this.cModelsNames.setSelectedItem(current);
+        }
     }
 
     /**
@@ -339,6 +362,13 @@ public class MainFrame extends JFrame
             }
         }
     }
+    
+    private void modelIsClicked(String modelName)
+    {
+        this.unselectAllSubs();
+        this.clearData(false);
+        this.controller.modelWasClicked(modelName);
+    }
 
     /**
      * Clears all selected fields and notify the controller when a class item is
@@ -422,13 +452,21 @@ public class MainFrame extends JFrame
         this.cSubClasses.unselectAll();
     }
 
+    
+    private void clearData()
+    {
+        this.clearData(true);
+    }
     /**
      * Clears everything
      */
-    private void clearData()
+    private void clearData(boolean clearModels)
     {
-        this.cFileInput.clear();
-        this.cModelLabel.clear();
+        if (clearModels) 
+        { 
+            this.cModelsNames.clear();
+            this.cFileInput.clear();
+        }
         this.cAggregations.clear();
         this.cAssociations.clear();
         this.cAttributes.clear();

@@ -32,7 +32,7 @@ public class FileInputComponent extends Component implements Listenable
 
         this.btnFileSelect = new JButton(btnText);
 
-        this.ta = new JTextArea(taText, 2, 40);
+        this.ta = new JTextArea(taText, 1, 40);
         this.ta.setEditable(false);
         this.sp = new JScrollPane(this.ta);
         this.pnl.add(this.btnFileSelect);

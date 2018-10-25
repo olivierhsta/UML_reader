@@ -5,35 +5,51 @@
  */
 package views.components;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  * Component for displaying a simple label.
  * @author olivi
  */
-public class LabelComponent extends Component
+public class DropdownComponent extends Component implements Listenable
 {
 
+    private JComboBox cb;
+    final DefaultComboBoxModel comboBoxModel;
     private JLabel lbl;
 
     /**
-     * Constructor of LabelComponent.
-     * Initialize a JLabel and adds it to the panel.
+     * Constructor of DropdownComponent.
+     * Initialize a JLabel and an empty dropdown menu.
      * @param labelText Text to display on the label
      */
-    public LabelComponent(String labelText)
+    public DropdownComponent(String labelText)
     {
+        this.comboBoxModel = new DefaultComboBoxModel();
+        this.cb = new JComboBox(comboBoxModel);
+        cb.setPrototypeDisplayValue("----------------------------"); // set minimum width
         this.lbl = new JLabel(labelText);
         this.pnl.add(lbl);
+        this.pnl.add(cb);
     }
 
     /**
-     * Empty the label text.
+     * Empty the combobox.
      */
     @Override
     public void clear()
     {
-        this.lbl.setText("");
+        this.comboBoxModel.removeAllElements();
     }
 
     /**
@@ -43,6 +59,26 @@ public class LabelComponent extends Component
     public void setText(String labelText)
     {
         this.lbl.setText(labelText);
+    }
+    
+    /**
+     * Adds an element to the dropdown.
+     * @param elementTxt String to add
+     */
+    public void addElement(String elementTxt)
+    {
+        this.comboBoxModel.addElement(elementTxt);
+    }
+    
+    @Override
+    public void setListener(ActionListener al)
+    {
+        this.cb.addActionListener(al);
+    }
+    
+    public void setSelectedItem(String item)
+    {
+        this.comboBoxModel.setSelectedItem(item);
     }
 
 }
