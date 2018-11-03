@@ -1,6 +1,7 @@
 package models.classes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import models.ModelDeclaration;
 import models.aggregations.Aggregation;
@@ -28,6 +29,7 @@ public class Class extends ModelDeclaration
     private ArrayList<Relation> relations = new ArrayList<>();
     private ArrayList<Aggregation> aggregations = new ArrayList<>();
     
+    private Class parent = null;
 
     public Class(String name)
     {
@@ -87,6 +89,9 @@ public class Class extends ModelDeclaration
 
     public void setSubClasses(ArrayList<Class> subClasses)
     {
+        for (Class subClass : subClasses){
+            subClass.setParent(this);
+        }
         this.subClasses = subClasses;
     }
 //    -------
@@ -178,6 +183,75 @@ public class Class extends ModelDeclaration
         }
 
         return str;
+    }
+    
+    
+   public void setParent(Class parent){
+       this.parent = parent;
+   }
+   
+   private int nod = -1;
+   private int cld = -1;
+   private int dit = -1; 
+   
+    public int getNOC(){
+        return this.subClasses.size();
+    }
+    
+    public int getNOD(){
+        int nod = 0;
+        
+        if ( this.nod >= 0 )
+        {
+            return this.nod;
+        }
+        
+        for ( Class subclass : this.subClasses )
+        {
+            nod += subclass.getNOD() + 1;
+        }
+        this.nod = nod;
+        return nod;
+    }
+    
+    public int getCLD(){
+        if (this.cld >= 0){return this.cld;}
+        if (this.subClasses.isEmpty()) 
+        {
+            this.cld = 0;
+            return 0;
+        }
+        
+        int counter = 0;
+        int optimal = Integer.MIN_VALUE;
+        for (Class subclass : this.subClasses){
+            counter = subclass.getCLD() + 1;
+            if (counter > optimal){
+                optimal = counter;
+            }
+        }
+        this.cld = optimal;
+        return optimal;
+    }
+    
+    public int getDIT(){
+        if (this.dit >= 0) { 
+           return this.dit;
+        }
+        if (this.parent == null)
+        {
+            this.dit = 0;
+            return 0;
+        }
+        return this.parent.getDIT()+1;
+    }
+    
+    public int getCAC(){
+        if (parent == null){
+            return this.aggregations.size() + this.relations.size();
+        } else {
+            return this.parent.getCAC() + this.aggregations.size() + this.relations.size();
+        }
     }
 
 }

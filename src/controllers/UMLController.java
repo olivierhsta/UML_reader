@@ -267,7 +267,7 @@ public class UMLController
     {
         // TODO
         ArrayList<String> metrics = new ArrayList();
-        metrics.add("1");
+        metrics.add(Integer.toString(this.currentClass.getCAC()));
         this.view.displayMetrics(metrics);
     }
 }

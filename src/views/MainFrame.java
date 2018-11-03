@@ -345,23 +345,6 @@ public class MainFrame extends JFrame
             this.cMetrics.addElement(metric);
         }
     }
-
-    /**
-     * Manually select an element from the class list. This only highlights the
-     * element, it does not trigger any action.
-     *
-     * @param className Name of the class element to select.
-     */
-    public void selectElementFromClassList(String className)
-    {
-        for (int i = 0; i < this.cClasses.getListSize(); i++)
-        {
-            if (className.equals(this.cClasses.getElementAt(i)))
-            {
-                this.cClasses.selectIndex(i);
-            }
-        }
-    }
     
     private void modelIsClicked(String modelName)
     {
@@ -379,6 +362,7 @@ public class MainFrame extends JFrame
     private void classIsClicked(String className)
     {
         unselectAllSubs();
+        this.cClasses.selectElement(className); // manually select the class in case this is trigger by a subclass click
         this.controller.classWasClicked(className);
     }
 

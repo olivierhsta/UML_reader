@@ -160,6 +160,23 @@ public class ListComponent extends Component implements Listenable
     {
         this.list.setSelectedIndex(index);
     }
+    
+    /**
+     * Highlights element which name matches the given String.
+     * Note that this function's purpose is solely visual. It does not trigger
+     * any action.
+     * @param elementName Name of the element to highlight
+     */
+    public void selectElement(String elementName)
+    {
+        for (int i = 0; i < this.listModel.getSize(); i++)
+        {
+            if (elementName.equals(this.listModel.getElementAt(i)))
+            {
+                this.list.setSelectedIndex(i);
+            }
+        }
+    }
 
 }
 
