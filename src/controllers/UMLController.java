@@ -4,8 +4,9 @@ import views.MainFrame;
 
 import java.io.File;
 import java.util.ArrayList;
-import models.classes.Class;
+import java.util.HashMap;
 import models.Model;
+import models.classes.Class;
 
 import models.UMLDecoder;
 import models.aggregations.Aggregation;
@@ -29,7 +30,10 @@ public class UMLController
      * Entry point to the frontend
      */
     private MainFrame view;
+    private HashMap<String,Model> UMLmodels;
+    private HashMap<String,Class> classes;
     private Class currentClass = null;  // when a class is clicked, remember its instance
+    private Model currentUMLModel = null;  // when an UMLmodel is chosen, remember its instance
 
     /**
      * Empty constructor. When this controller is used, the view and model are
@@ -37,6 +41,7 @@ public class UMLController
      */
     public UMLController()
     {
+        this.UMLmodels = new HashMap();
     }
 
     /**
@@ -49,6 +54,7 @@ public class UMLController
     {
         this.view = view;
         this.model = model;
+        this.UMLmodels = new HashMap();
     }
 
     public void setModel(UMLDecoder model)
@@ -81,16 +87,27 @@ public class UMLController
         this.model = new UMLDecoder(this);
         this.model.setFile(file);
         if (!this.model.getUMLModels().isEmpty())
-        {
-            if (!this.model.getUMLModels().get(0).getClasses().isEmpty())
+        {            
+            for (Model model : this.model.getUMLModels())
             {
-                this.displayClasses();
-                this.displayModelName();
-            } else
-            {
-                this.view.alert("Model is not well formated");
+                if (model.getClasses().isEmpty())
+                {
+                    this.view.alert("Model " + model.getName() + " wrongly formated");
+                }
+                else if (this.currentUMLModel == null)
+                {
+                    this.currentUMLModel = model;
+                }
+                this.UMLmodels.put(model.getName(), model);
             }
-        } else
+            if (this.currentUMLModel != null)
+            {
+                System.out.println(this.currentUMLModel.getName());
+                this.displayClasses(this.currentUMLModel); // display the information of the first model
+                this.view.displayModelsNames(this.UMLmodels.keySet(), this.currentUMLModel.getName());
+            }
+        }
+        else
         {
             this.view.alert("No Model declared in the given file.  Make sure the"
                     + " Model follows the UML standards.");
@@ -99,28 +116,27 @@ public class UMLController
     }
 
     /**
-     * Displays the classes of the model.
+     * Displays the classes of the current model
+     * and puts them in a HashMap
+     * @param model model from which to display the classes
      */
-    public void displayClasses()
+    public void displayClasses(Model model)
     {
-        ArrayList<String> classes = new ArrayList<String>();
+        this.classes = new HashMap();
 
-        for (Class mClass : this.model.getUMLModels().get(0).getClasses())
+        for (Class mClass : model.getClasses())
         {
-            classes.add(mClass.getName());
+            classes.put(mClass.getName(), mClass);
         }
-        this.view.displayModelName(this.model.getUMLModels().get(0).getName());
-        this.view.displayClasses(classes);
+        this.view.displayClasses(this.classes.keySet());
     }
-
-    /**
-     * Displays the name for the model.
-     */
-    public void displayModelName()
+    
+    public void modelWasClicked(String modelName)
     {
-        this.view.displayModelName(this.model.getUMLModels().get(0).getName());
+        System.out.println(modelName);
+        this.displayClasses(this.UMLmodels.get(modelName));
     }
-
+    
     /**
      * Get the descriptive elements of a given class and display them. Will
      * display attributes, methods, associations, aggregations and subclasses
@@ -129,51 +145,40 @@ public class UMLController
      */
     public void classWasClicked(String className)
     {
-
-        Class clickedElement = null;
-        for (Class mClass : this.model.getUMLModels().get(0).getClasses())
-        {
-            if (className.equals(mClass.getName()))
-            {
-                clickedElement = mClass;
-                break; // we assume that there is only one class with the same name
-            }
-        }
-
-        this.currentClass = clickedElement;  // remember the current class
+        this.currentClass = this.classes.get(className);  // remember the current class
 
         /* --- Get and display the descriptive elements ---*/
         ArrayList<String> elementNames = new ArrayList();
 
-        for (Attribute attribute : clickedElement.getAttributes())
+        for (Attribute attribute : this.currentClass.getAttributes())
         {
             elementNames.add(attribute.getName());
         }
         this.view.displayAttributes(elementNames);
         elementNames.clear();
 
-        for (Class subClass : clickedElement.getSubClasses())
+        for (Class subClass : this.currentClass.getSubClasses())
         {
             elementNames.add(subClass.getName());
         }
         this.view.displaySubClasses(elementNames);
         elementNames.clear();
 
-        for (Operation operation : clickedElement.getOperations())
+        for (Operation operation : this.currentClass.getOperations())
         {
             elementNames.add(operation.getName());
         }
         this.view.displayMethods(elementNames);
         elementNames.clear();
 
-        for (Aggregation aggreagation : clickedElement.getAggregations())
+        for (Aggregation aggreagation : this.currentClass.getAggregations())
         {
             elementNames.add(aggreagation.getName());
         }
         this.view.displayAggregations(elementNames);
         elementNames.clear();
 
-        for (Relation relation : clickedElement.getRelations())
+        for (Relation relation : this.currentClass.getRelations())
         {
             elementNames.add(relation.getName());
         }
@@ -253,5 +258,16 @@ public class UMLController
                 this.view.displayDetails(aggregation.getDetails());
             }
         }
+    }
+    
+    /**
+     * Ask the model to generate the metrics and sends the results to the view
+     */
+    public void calculateMetricsWasClicked()
+    {
+        // TODO
+        ArrayList<String> metrics = new ArrayList();
+        metrics.add("1");
+        this.view.displayMetrics(metrics);
     }
 }

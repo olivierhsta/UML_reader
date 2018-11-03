@@ -5,7 +5,6 @@
  */
 package views;
 
-import views.components.DetailComponent;
 import views.components.FileInputComponent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -20,11 +19,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import controllers.UMLController;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Set;
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import views.components.LabelComponent;
+import views.components.ButtonComponent;
+import views.components.DropdownComponent;
 import views.components.ListComponent;
+import views.components.TextAreaComponent;
 
 /**
  *
@@ -34,10 +38,11 @@ public class MainFrame extends JFrame
 {
 
     private UMLController controller;
-    private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations;
+    private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations, cMetrics;
     private FileInputComponent cFileInput;
-    private LabelComponent cModelLabel;
-    private DetailComponent cDetails;
+    private DropdownComponent cModelsNames;
+    private TextAreaComponent cDetails;
+    private ButtonComponent cCalculateMetrics;
     private JPanel pnl, pnlElement, pnlHeader;
 
     /**
@@ -59,7 +64,8 @@ public class MainFrame extends JFrame
         this.controller = controller;
 
         this.cFileInput = new FileInputComponent("Select File", null);
-        this.cModelLabel = new LabelComponent("");
+        this.cModelsNames = new DropdownComponent("Models");
+        this.cCalculateMetrics = new ButtonComponent("Calculate Metrics");
 
         this.cClasses = new ListComponent("Classes", 200, 100);
         this.cAttributes = new ListComponent("Attributes");
@@ -67,8 +73,9 @@ public class MainFrame extends JFrame
         this.cSubClasses = new ListComponent("SubClasses");
         this.cAssociations = new ListComponent("Associations");
         this.cAggregations = new ListComponent("Aggregations");
+        this.cMetrics = new ListComponent("Metriques");
 
-        this.cDetails = new DetailComponent("Details");
+        this.cDetails = new TextAreaComponent("Details");
 
         this.render();
         this.declareListeners();
@@ -87,8 +94,9 @@ public class MainFrame extends JFrame
         this.pnlHeader = new JPanel(new BorderLayout());
         this.pnlElement = new JPanel(new GridLayout(3, 2));
 
-        this.pnlHeader.add(this.cModelLabel.toDisplay(), BorderLayout.WEST);
+        this.pnlHeader.add(this.cModelsNames.toDisplay(), BorderLayout.WEST);
         this.pnlHeader.add(this.cFileInput.toDisplay(), BorderLayout.CENTER);
+        this.pnlHeader.add(this.cCalculateMetrics.toDisplay(), BorderLayout.EAST);
         
         this.pnlElement.add(this.cAttributes.toDisplay());
         this.pnlElement.add(this.cMethods.toDisplay());
@@ -98,6 +106,7 @@ public class MainFrame extends JFrame
 
         this.pnl.add(this.pnlHeader, BorderLayout.NORTH);
         this.pnl.add(this.cClasses.toDisplay(), BorderLayout.WEST);
+        this.pnl.add(this.cMetrics.toDisplay(), BorderLayout.EAST);
         this.pnl.add(this.pnlElement, BorderLayout.CENTER);
         this.pnl.add(this.cDetails.toDisplay(), BorderLayout.SOUTH);
 
@@ -135,6 +144,12 @@ public class MainFrame extends JFrame
                 }
             }
         });
+        
+        this.cModelsNames.setListener((ActionEvent e) ->
+        {
+            JComboBox cb = (JComboBox) e.getSource();
+            modelIsClicked(cb.getSelectedItem().toString());
+        });
 
         this.cClasses.setListener((ActionEvent e) ->
         {
@@ -169,7 +184,12 @@ public class MainFrame extends JFrame
         this.cAggregations.setListener((ActionEvent e) ->
         {
             JList list = (JList) e.getSource();
-            associationIsClicked(list.getSelectedValue().toString());
+            aggregationIsClicked(list.getSelectedValue().toString());
+        });
+        
+        this.cCalculateMetrics.setListener((ActionEvent e) ->
+        {
+            calculateMetricsIsClicked();
         });
     }
 
@@ -200,7 +220,7 @@ public class MainFrame extends JFrame
      *
      * @param classes Elements to display
      */
-    public void displayClasses(ArrayList<String> classes)
+    public void displayClasses(Set<String> classes)
     {
         this.unselectAllSubs();
         this.cClasses.clear();
@@ -223,11 +243,25 @@ public class MainFrame extends JFrame
     
     /**
      * Display the UML Model name in the label on the top left.
-     * @param name Name of the UML Model.
+     * @param names Name of the UML Models.
+     * @param current Model to be selected by default
      */
-    public void displayModelName(String name)
+    public void displayModelsNames(Set<String> names, String current)
     {
-        this.cModelLabel.setText(name);
+        boolean currentValid = false;
+        for (String name : names)
+        {
+            if (name.equals(current))
+            {
+                currentValid = true;
+            }
+            this.cModelsNames.addElement(name);
+        }
+        
+        if (currentValid)
+        {
+            this.cModelsNames.setSelectedItem(current);
+        }
     }
 
     /**
@@ -299,6 +333,18 @@ public class MainFrame extends JFrame
             this.cAggregations.addElement(aggregation);
         }
     }
+    
+    /**
+     * Display a list of String in the Metrics field.
+     * @param metrics Elements to display
+     */
+    public void displayMetrics(ArrayList<String> metrics)
+    {
+        for (String metric : metrics)
+        {
+            this.cMetrics.addElement(metric);
+        }
+    }
 
     /**
      * Manually select an element from the class list. This only highlights the
@@ -315,6 +361,13 @@ public class MainFrame extends JFrame
                 this.cClasses.selectIndex(i);
             }
         }
+    }
+    
+    private void modelIsClicked(String modelName)
+    {
+        this.unselectAllSubs();
+        this.clearData(false);
+        this.controller.modelWasClicked(modelName);
     }
 
     /**
@@ -376,6 +429,16 @@ public class MainFrame extends JFrame
         unselectAllSubs();
         this.controller.aggregationWasClicked(aggregationName);
     }
+    
+    /**
+     * Clears the metrics fields and notify the controller when the 
+     * calculateMetrics component is clicked
+     */
+    private void calculateMetricsIsClicked()
+    {
+        this.cMetrics.clear();
+        this.controller.calculateMetricsWasClicked();
+    }
 
     /**
      * Unselect every list element except for the class' list
@@ -389,10 +452,21 @@ public class MainFrame extends JFrame
         this.cSubClasses.unselectAll();
     }
 
+    
     private void clearData()
     {
-        this.cFileInput.clear();
-        this.cModelLabel.clear();
+        this.clearData(true);
+    }
+    /**
+     * Clears everything
+     */
+    private void clearData(boolean clearModels)
+    {
+        if (clearModels) 
+        { 
+            this.cModelsNames.clear();
+            this.cFileInput.clear();
+        }
         this.cAggregations.clear();
         this.cAssociations.clear();
         this.cAttributes.clear();
@@ -400,5 +474,6 @@ public class MainFrame extends JFrame
         this.cSubClasses.clear();
         this.cClasses.clear();
         this.cDetails.clear();
+        this.cMetrics.clear();
     }
 }

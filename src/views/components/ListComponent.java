@@ -21,7 +21,7 @@ import javax.swing.JScrollPane;
  * This Component displays a JLabel above a JScrollPane containing a JList
  * @author olivi
  */
-public class ListComponent extends Component
+public class ListComponent extends Component implements Listenable
 {
 
     private JList list;
@@ -70,6 +70,7 @@ public class ListComponent extends Component
      * Sets an ActionListener mapped to the ENTER key and the mouse double click.
      * @param al ActionListement to map
      */
+    @Override
     public void setListener(ActionListener al)
     {
 

@@ -14,7 +14,7 @@ import javax.swing.JTextArea;
  * This Component contains a button and a non-editable text field.
  * @author olivi
  */
-public class FileInputComponent extends Component
+public class FileInputComponent extends Component implements Listenable
 {
     private JButton btnFileSelect;
     private JTextArea ta;
@@ -32,7 +32,7 @@ public class FileInputComponent extends Component
 
         this.btnFileSelect = new JButton(btnText);
 
-        this.ta = new JTextArea(taText, 2, 40);
+        this.ta = new JTextArea(taText, 1, 40);
         this.ta.setEditable(false);
         this.sp = new JScrollPane(this.ta);
         this.pnl.add(this.btnFileSelect);
@@ -54,11 +54,12 @@ public class FileInputComponent extends Component
 
     /**
      * Sets the button listener.
-     * @param actionListener Action to execute upon click.
+     * @param al Action to execute upon click.
      */
-    public void setListener(ActionListener actionListener)
+    @Override
+    public void setListener(ActionListener al)
     {
-        this.btnFileSelect.addActionListener(actionListener);
+        this.btnFileSelect.addActionListener(al);
     }
     
     @Override
