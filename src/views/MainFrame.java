@@ -19,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import controllers.UMLController;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.JComboBox;
@@ -38,11 +37,11 @@ public class MainFrame extends JFrame
 {
 
     private UMLController controller;
-    private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations, cMetrics;
+    private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations;
     private FileInputComponent cFileInput;
     private DropdownComponent cModelsNames;
-    private TextAreaComponent cDetails;
-    private ButtonComponent cCalculateMetrics;
+    private TextAreaComponent cDetails, cMetrics;
+    private ButtonComponent cExportMetrics;
     private JPanel pnl, pnlElement, pnlHeader;
 
     /**
@@ -65,7 +64,7 @@ public class MainFrame extends JFrame
 
         this.cFileInput = new FileInputComponent("Select File", null);
         this.cModelsNames = new DropdownComponent("Models");
-        this.cCalculateMetrics = new ButtonComponent("Calculate Metrics");
+        this.cExportMetrics = new ButtonComponent("Export Metrics");
 
         this.cClasses = new ListComponent("Classes", 200, 100);
         this.cAttributes = new ListComponent("Attributes");
@@ -73,8 +72,8 @@ public class MainFrame extends JFrame
         this.cSubClasses = new ListComponent("SubClasses");
         this.cAssociations = new ListComponent("Associations");
         this.cAggregations = new ListComponent("Aggregations");
-        this.cMetrics = new ListComponent("Metriques");
-
+        
+        this.cMetrics = new TextAreaComponent("Metriques", 30, 20);
         this.cDetails = new TextAreaComponent("Details");
 
         this.render();
@@ -96,7 +95,7 @@ public class MainFrame extends JFrame
 
         this.pnlHeader.add(this.cModelsNames.toDisplay(), BorderLayout.WEST);
         this.pnlHeader.add(this.cFileInput.toDisplay(), BorderLayout.CENTER);
-        this.pnlHeader.add(this.cCalculateMetrics.toDisplay(), BorderLayout.EAST);
+        this.pnlHeader.add(this.cExportMetrics.toDisplay(), BorderLayout.EAST);
         
         this.pnlElement.add(this.cAttributes.toDisplay());
         this.pnlElement.add(this.cMethods.toDisplay());
@@ -149,6 +148,7 @@ public class MainFrame extends JFrame
         {
             JComboBox cb = (JComboBox) e.getSource();
             modelIsClicked(cb.getSelectedItem().toString());
+            
         });
 
         this.cClasses.setListener((ActionEvent e) ->
@@ -187,9 +187,9 @@ public class MainFrame extends JFrame
             aggregationIsClicked(list.getSelectedValue().toString());
         });
         
-        this.cCalculateMetrics.setListener((ActionEvent e) ->
+        this.cExportMetrics.setListener((ActionEvent e) ->
         {
-            calculateMetricsIsClicked();
+            exportMetricsIsClicked();
         });
     }
 
@@ -362,6 +362,7 @@ public class MainFrame extends JFrame
     private void classIsClicked(String className)
     {
         unselectAllSubs();
+        this.cMetrics.clear();
         this.cClasses.selectElement(className); // manually select the class in case this is trigger by a subclass click
         this.controller.classWasClicked(className);
     }
@@ -416,12 +417,12 @@ public class MainFrame extends JFrame
     
     /**
      * Clears the metrics fields and notify the controller when the 
-     * calculateMetrics component is clicked
+     * cExportMetrics component is clicked
      */
-    private void calculateMetricsIsClicked()
+    private void exportMetricsIsClicked()
     {
         this.cMetrics.clear();
-        this.controller.calculateMetricsWasClicked();
+        this.controller.exportMetricsWasClicked();
     }
 
     /**
@@ -436,13 +437,19 @@ public class MainFrame extends JFrame
         this.cSubClasses.unselectAll();
     }
 
-    
+    /**
+     * Clears everything
+     */
     private void clearData()
     {
         this.clearData(true);
     }
+    
     /**
-     * Clears everything
+     * Clears the information in the frame
+     * @param clearModels if <code>true</code> also clear the model 
+     *                    dropdown and de fileinput field.  If false, only clear
+     *                    this others.
      */
     private void clearData(boolean clearModels)
     {
@@ -451,6 +458,7 @@ public class MainFrame extends JFrame
             this.cModelsNames.clear();
             this.cFileInput.clear();
         }
+        this.cMetrics.clear();
         this.cAggregations.clear();
         this.cAssociations.clear();
         this.cAttributes.clear();

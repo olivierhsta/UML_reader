@@ -78,8 +78,8 @@ public class Model {
 		}
 		
 		for (Class cl : this.classes) {
-			cl.setItc(this.classes);
-			cl.setEtc(this.classes);
+			cl.setITC(this.classes);
+			cl.setETC(this.classes);
 		}
 
 	}

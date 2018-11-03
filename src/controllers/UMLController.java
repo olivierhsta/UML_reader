@@ -54,7 +54,6 @@ public class UMLController
     {
         this.view = view;
         this.model = model;
-        this.UMLmodels = new HashMap();
     }
 
     public void setModel(UMLDecoder model)
@@ -84,6 +83,8 @@ public class UMLController
      */
     public void generateModel(File file)
     {
+        this.UMLmodels = new HashMap();
+        this.currentUMLModel = null;
         this.model = new UMLDecoder(this);
         this.model.setFile(file);
         if (!this.model.getUMLModels().isEmpty())
@@ -102,7 +103,6 @@ public class UMLController
             }
             if (this.currentUMLModel != null)
             {
-                System.out.println(this.currentUMLModel.getName());
                 this.displayClasses(this.currentUMLModel); // display the information of the first model
                 this.view.displayModelsNames(this.UMLmodels.keySet(), this.currentUMLModel.getName());
             }
@@ -131,9 +131,13 @@ public class UMLController
         this.view.displayClasses(this.classes.keySet());
     }
     
+    /**
+     * Change the displayed model information when a different model is selected.
+     * @param modelName Name of the model to display
+     */
     public void modelWasClicked(String modelName)
     {
-        System.out.println(modelName);
+        this.currentClass = null;
         this.displayClasses(this.UMLmodels.get(modelName));
     }
     
@@ -147,43 +151,58 @@ public class UMLController
     {
         this.currentClass = this.classes.get(className);  // remember the current class
 
-        /* --- Get and display the descriptive elements ---*/
-        ArrayList<String> elementNames = new ArrayList();
+        if (this.currentClass != null){
+            /* --- Get and display the descriptive elements ---*/
+            ArrayList<String> elements = new ArrayList();
 
-        for (Attribute attribute : this.currentClass.getAttributes())
-        {
-            elementNames.add(attribute.getName());
-        }
-        this.view.displayAttributes(elementNames);
-        elementNames.clear();
+            for (Attribute attribute : this.currentClass.getAttributes())
+            {
+                elements.add(attribute.getName());
+            }
+            this.view.displayAttributes(elements);
+            elements.clear();
 
-        for (Class subClass : this.currentClass.getSubClasses())
-        {
-            elementNames.add(subClass.getName());
-        }
-        this.view.displaySubClasses(elementNames);
-        elementNames.clear();
+            for (Class subClass : this.currentClass.getSubClasses())
+            {
+                elements.add(subClass.getName());
+            }
+            this.view.displaySubClasses(elements);
+            elements.clear();
 
-        for (Operation operation : this.currentClass.getOperations())
-        {
-            elementNames.add(operation.getName());
-        }
-        this.view.displayMethods(elementNames);
-        elementNames.clear();
+            for (Operation operation : this.currentClass.getOperations())
+            {
+                elements.add(operation.getName());
+            }
+            this.view.displayMethods(elements);
+            elements.clear();
 
-        for (Aggregation aggreagation : this.currentClass.getAggregations())
-        {
-            elementNames.add(aggreagation.getName());
-        }
-        this.view.displayAggregations(elementNames);
-        elementNames.clear();
+            for (Aggregation aggreagation : this.currentClass.getAggregations())
+            {
+                elements.add(aggreagation.getName());
+            }
+            this.view.displayAggregations(elements);
+            elements.clear();
 
-        for (Relation relation : this.currentClass.getRelations())
-        {
-            elementNames.add(relation.getName());
+            for (Relation relation : this.currentClass.getRelations())
+            {
+                elements.add(relation.getName());
+            }
+            this.view.displayAssociations(elements);
+            elements.clear();
+        
+            elements.add("ANA = " + this.currentClass.getANA());
+            elements.add("NOM = " + this.currentClass.getNOM());
+            elements.add("NOA = " + this.currentClass.getNOA());
+            elements.add("ITC = " + this.currentClass.getITC());
+            elements.add("ETC = " + this.currentClass.getETC());
+            elements.add("CAC = " + this.currentClass.getCAC());
+            elements.add("DIT = " + this.currentClass.getDIT());
+            elements.add("CLD = " + this.currentClass.getCLD());
+            elements.add("NOC = " + this.currentClass.getNOC());
+            elements.add("NOD = " + this.currentClass.getNOD());
+
+            this.view.displayMetrics(elements);
         }
-        this.view.displayAssociations(elementNames);
-        elementNames.clear();
     }
 
     /**
@@ -261,13 +280,10 @@ public class UMLController
     }
     
     /**
-     * Ask the model to generate the metrics and sends the results to the view
+     * Exports the metrics in a CSV file
      */
-    public void calculateMetricsWasClicked()
+    public void exportMetricsWasClicked()
     {
-        // TODO
-        ArrayList<String> metrics = new ArrayList();
-        metrics.add(Integer.toString(this.currentClass.getCAC()));
-        this.view.displayMetrics(metrics);
+        
     }
 }
