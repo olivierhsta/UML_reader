@@ -5,6 +5,7 @@ import views.MainFrame;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import main.CSVMaker;
 import models.Model;
 import models.classes.Class;
 
@@ -284,6 +285,19 @@ public class UMLController
      */
     public void exportMetricsWasClicked()
     {
-        
+        try {
+            String outputFileName = this.model.getFile().getName().replaceFirst("[.][^.]+$", "") + "-analysis";
+            String filePath = CSVMaker.export(this.UMLmodels.values(), outputFileName);
+            if (filePath == null) {
+                this.view.alert("Error while trying to generate metric analysis.  "
+                        + "\nMake sure the file "
+                        + "\n" + CSVMaker.PATH + outputFileName + ".csv"
+                        + "\n is not open.");
+            } else {
+                this.view.info("File created : "+filePath);
+            }
+        } catch (NullPointerException ex){
+            this.view.alert("Operation not allowed");
+        }
     }
 }

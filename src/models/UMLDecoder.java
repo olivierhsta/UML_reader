@@ -27,6 +27,10 @@ public class UMLDecoder
 		this.file = file;
 		this.parseFile();
 	}
+        
+        public File getFile(){
+            return this.file;
+        }
 	
 	public void parseFile() {
 		

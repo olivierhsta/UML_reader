@@ -126,9 +126,7 @@ public class MainFrame extends JFrame
     {
         this.cFileInput.setListener((ActionEvent e) ->
         {
-
             FileChooser fileChooser = new FileChooser(config.ACCEPTED_EXTENSIONS);
-            clearData();
             if (!fileChooser.isCancel())
             {
                 if (!fileChooser.isValid())
@@ -139,6 +137,7 @@ public class MainFrame extends JFrame
                     alert("The file is empty");
                 } else
                 {
+                    clearData();
                     setFile(fileChooser.getFile());
                 }
             }
@@ -146,9 +145,12 @@ public class MainFrame extends JFrame
         
         this.cModelsNames.setListener((ActionEvent e) ->
         {
+            try{
             JComboBox cb = (JComboBox) e.getSource();
             modelIsClicked(cb.getSelectedItem().toString());
-            
+            } catch (NullPointerException ex){
+                
+            }
         });
 
         this.cClasses.setListener((ActionEvent e) ->
@@ -212,7 +214,16 @@ public class MainFrame extends JFrame
      */
     public void alert(String message)
     {
-        JOptionPane.showMessageDialog(null, message);
+        JOptionPane.showMessageDialog(null, message, null, JOptionPane.ERROR_MESSAGE);
+    }
+    
+    /**
+     * Affiche une alerte informative.
+     *
+     * @param message Chaine de caractère à afficher dans l'alerte.
+     */
+    public void info(String message){
+        JOptionPane.showMessageDialog(null, message, null, JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -348,6 +359,7 @@ public class MainFrame extends JFrame
     
     private void modelIsClicked(String modelName)
     {
+        this.cClasses.unselectAll();
         this.unselectAllSubs();
         this.clearData(false);
         this.controller.modelWasClicked(modelName);
@@ -421,7 +433,6 @@ public class MainFrame extends JFrame
      */
     private void exportMetricsIsClicked()
     {
-        this.cMetrics.clear();
         this.controller.exportMetricsWasClicked();
     }
 

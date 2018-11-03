@@ -1,15 +1,18 @@
 package main;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
 
 import models.Model;
 
 abstract public class CSVMaker {
+    
+    public static final String PATH = System.getProperty("user.dir")+File.separator;
 	
-	public static void export(ArrayList<Model> models, String fileName) {
+	public static String export(Collection<Model> models, String fileName) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fileName + ".csv"));
 			
@@ -37,14 +40,17 @@ abstract public class CSVMaker {
 					writer.newLine();
 					writer.append(line);
 				}
+                                writer.newLine();
 				
 			}
 			
 			
 			writer.close();
+                        return PATH+fileName+".csv";
 		} catch (IOException e) {
-			
+			     
 		}
+                return null;
 	}
 
 }
