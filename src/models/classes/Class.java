@@ -37,6 +37,9 @@ public class Class extends ModelDeclaration
     private float ana = -1;
     private int itc = -1;
     private int etc = -1;
+    private int nod = -1;
+    private int cld = -1;
+    private int dit = -1; 
     
 
     public Class(String name)
@@ -45,10 +48,10 @@ public class Class extends ModelDeclaration
     }
     
     /**
-     * #1
-     * @return
+     * Nombre moyen d’arguments des methodes locales pour la classes
+     * @return Nombre moyen d'argument
      */
-    public float getAna() {
+    public float getANA() {
     	
     	if (this.ana > -1) {
     		return this.ana;
@@ -72,7 +75,10 @@ public class Class extends ModelDeclaration
     }
     
     /**
-     * #2
+     * Nombre de methodes locales/heritees de la classe . 
+     * Dans le cas où une methode est heritee et redefinie localement 
+     * (même nom, même ordre et types des arguments et même type de retour),
+     * elle ne compte qu’une fois.
      * @return
      */
     public int getNOM() {
@@ -80,22 +86,28 @@ public class Class extends ModelDeclaration
     }
     
     /**
-     * #3
-     * @return
+     * Nombre d’attributs locaux/herites de la classe c
+     * @return Nombre d'attributs
      */
     public int getNOA() {
     	return this.attributes.size();
     }
     
     /**
-     * #4
-     * @return
+     * Nombre de fois où d’autres classes du diagramme apparaissent 
+     * comme types des arguments des methodes de la classe.
+     * @return Nombre de fois
      */
-    public int getItc() {
+    public int getITC() {
     	return this.itc;
     }
     
-    public void setItc(ArrayList<Class> allClasses) {
+    /**
+     * Setter pour ITC.  Il faut appeler ce setter avant de
+     * pouvoir obtenir la valeur par <code>getITC()</code>
+     * @param allClasses Toutes les classes du model.
+     */
+    public void setITC(ArrayList<Class> allClasses) {
     	if (this.operations.size() > 0) {
     		int nbRef = 0;
     		
@@ -123,27 +135,121 @@ public class Class extends ModelDeclaration
     }
     
     /**
-     * #5
-     * @return
+     * Nombre d’associations (incluant les agregations) 
+     * locales/heritees auxquelles participe la classe.
+     * @return Nombre d'associations/aggregation
      */
-    public int getEtc() {
+    public int getETC() {
     	return this.etc;
     }
     
-    public void setEtc(ArrayList<Class> allClasses) {
+     /**
+      * Setter pour ETC.  Il faut appeler ce setter avant de
+      * pouvoir obtenir la valeur par <code>getETC()</code>
+      */
+    public void setETC(ArrayList<Class> allClasses) {
     	int reccu = 0;
-    	for (Class cl : allClasses) {
-    		for (Operation op : cl.getOperations()) {
-    			for (Attribute attr : op.getParameters()) {
-    				if (attr.getType().equals(this.name)) {
-    					reccu ++;
-    				}
-    			}
-    		}
-		}
+    	for (Class cl : allClasses)
+        {
+            for (Operation op : cl.getOperations())
+            {
+                for (Attribute attr : op.getParameters())
+                {
+                    if (attr.getType().equals(this.name))
+                    {
+                        reccu++;
+                    }
+                }
+            }
+        }
     	
-    	this.etc = 0;
+    	this.etc = reccu;
     }
+    
+    /**
+     * Nombre d’associations (incluant les agregations) l
+     * ocales/heritees auxquelles participe la classe.
+     * @return Valeur calculee
+     */
+    public int getCAC(){
+        if (parent == null){
+            return this.aggregations.size() + this.relations.size();
+        } else {
+            return this.parent.getCAC() + this.aggregations.size() + this.relations.size();
+        }
+    }
+    
+    /**
+     * Taille du chemin le plus long reliant la classe à une 
+     * classe racine dans le graphe d’heritage.
+     * @return Valeur calculee
+     */
+    public int getDIT(){
+        if (this.dit >= 0) { 
+           return this.dit;
+        }
+        if (this.parent == null)
+        {
+            this.dit = 0;
+            return 0;
+        }
+        return this.parent.getDIT()+1;
+    }
+    
+     /**
+     * Taille du chemin le plus long reliant la classe
+     * à une classe feuille dans le graphe d’heritage.
+     * @return Valeur calculee
+     */
+    public int getCLD(){
+        if (this.cld >= 0){return this.cld;}
+        if (this.subClasses.isEmpty()) 
+        {
+            this.cld = 0;
+            return 0;
+        }
+        
+        int counter = 0;
+        int optimal = Integer.MIN_VALUE;
+        for (Class subclass : this.subClasses){
+            counter = subclass.getCLD() + 1;
+            if (counter > optimal){
+                optimal = counter;
+            }
+        }
+        this.cld = optimal;
+        return optimal;
+    }
+    
+    /**
+     * Nombre de sous-classes directes de la classe.
+     * @return Valeur calculee
+     */    
+    public int getNOC(){
+        return this.subClasses.size();
+    }
+    
+    /**
+     * Nombre de sous-classes directes et indirectes de la classe.
+     * @return Valeur calculee
+     */
+    public int getNOD(){
+        int nod = 0;
+        
+        if ( this.nod >= 0 )
+        {
+            return this.nod;
+        }
+        
+        for ( Class subclass : this.subClasses )
+        {
+            nod += subclass.getNOD() + 1;
+        }
+        this.nod = nod;
+        return nod;
+    }
+    
+    
     
     
     public String getName()
@@ -290,69 +396,4 @@ public class Class extends ModelDeclaration
    public void setParent(Class parent){
        this.parent = parent;
    }
-   
-   private int nod = -1;
-   private int cld = -1;
-   private int dit = -1; 
-   
-    public int getNOC(){
-        return this.subClasses.size();
-    }
-    
-    public int getNOD(){
-        int nod = 0;
-        
-        if ( this.nod >= 0 )
-        {
-            return this.nod;
-        }
-        
-        for ( Class subclass : this.subClasses )
-        {
-            nod += subclass.getNOD() + 1;
-        }
-        this.nod = nod;
-        return nod;
-    }
-    
-    public int getCLD(){
-        if (this.cld >= 0){return this.cld;}
-        if (this.subClasses.isEmpty()) 
-        {
-            this.cld = 0;
-            return 0;
-        }
-        
-        int counter = 0;
-        int optimal = Integer.MIN_VALUE;
-        for (Class subclass : this.subClasses){
-            counter = subclass.getCLD() + 1;
-            if (counter > optimal){
-                optimal = counter;
-            }
-        }
-        this.cld = optimal;
-        return optimal;
-    }
-    
-    public int getDIT(){
-        if (this.dit >= 0) { 
-           return this.dit;
-        }
-        if (this.parent == null)
-        {
-            this.dit = 0;
-            return 0;
-        }
-        return this.parent.getDIT()+1;
-    }
-    
-    public int getCAC(){
-        if (parent == null){
-            return this.aggregations.size() + this.relations.size();
-        } else {
-            return this.parent.getCAC() + this.aggregations.size() + this.relations.size();
-        }
-    }
-
 }
