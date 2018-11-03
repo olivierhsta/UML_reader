@@ -1,6 +1,10 @@
 package models.classes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+import com.sun.org.apache.xalan.internal.xsltc.runtime.Attributes;
 
 import models.ModelDeclaration;
 import models.aggregations.Aggregation;
@@ -28,22 +32,118 @@ public class Class extends ModelDeclaration
     private ArrayList<Relation> relations = new ArrayList<>();
     private ArrayList<Aggregation> aggregations = new ArrayList<>();
     
+    private float ana = -1;
+    private int itc = -1;
+    private int etc = -1;
+    
 
     public Class(String name)
     {
         super(name);
     }
     
-    public int getAna() {
-    	int nbParam = 0;
+    /**
+     * #1
+     * @return
+     */
+    public float getAna() {
     	
-    	for (Operation op : this.operations) {
-    		nbParam += op.getParameters().size();
-    	}    	
+    	if (this.ana > -1) {
+    		return this.ana;
+    		
+    	} else {
+    		
+    		int nbParam = 0;
+        	
+        	if (this.operations.size() > 0) {
+        		for (Operation op : this.operations) {
+            		nbParam += op.getParameters().size();
+            	}
+        		this.ana = (float) nbParam / this.operations.size();
+        	} else {
+        		this.ana = 0;
+        	}
+        	
+        	return this.ana;
+    	}
     	
-    	return nbParam / this.operations.size();
     }
+    
+    /**
+     * #2
+     * @return
+     */
+    public int getNOM() {
+    	return this.operations.size();
+    }
+    
+    /**
+     * #3
+     * @return
+     */
+    public int getNOA() {
+    	return this.attributes.size();
+    }
+    
+    /**
+     * #4
+     * @return
+     */
+    public int getItc() {
+    	return this.itc;
+    }
+    
+    public void setItc(ArrayList<Class> allClasses) {
+    	if (this.operations.size() > 0) {
+    		int nbRef = 0;
+    		
+    		for (Operation op : this.operations) {
 
+    			for (Attribute attr : op.getParameters()) {
+    				boolean addItc = false;
+    				
+    				for (Class cl : allClasses) {
+    					if (attr.getType().equals(cl.getName())) {
+    						addItc = true;
+    					}
+    				}
+    				
+    				if (addItc)
+    					nbRef ++;
+    			}
+    			
+        	}
+    		
+    		this.itc = nbRef;
+    	} else {
+    		this.itc = 0;
+    	}
+    }
+    
+    /**
+     * #5
+     * @return
+     */
+    public int getEtc() {
+    	return this.etc;
+    }
+    
+    public void setEtc(ArrayList<Class> allClasses) {
+    	int reccu = 0;
+    	for (Class cl : allClasses) {
+    		for (Operation op : cl.getOperations()) {
+    			for (Attribute attr : op.getParameters()) {
+    				if (attr.getType().equals(this.name)) {
+    					reccu ++;
+    				}
+    			}
+    		}
+		}
+    	
+    	this.etc = 0;
+    }
+    
+    
     public String getName()
     {
         return this.name;
@@ -123,6 +223,7 @@ public class Class extends ModelDeclaration
                 }
             }
         }
+        
     }
 
     @Override
