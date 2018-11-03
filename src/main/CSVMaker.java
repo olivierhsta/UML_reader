@@ -12,9 +12,10 @@ abstract public class CSVMaker {
     
     public static final String PATH = System.getProperty("user.dir")+File.separator;
 	
-	public static String export(Collection<Model> models, String fileName) {
+	public static File export(Collection<Model> models, String fileName) {
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(fileName + ".csv"));
+                        File file = new File(PATH+fileName+".csv");
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			
 			// Print header
 			writer.append("Model,Class,ANA,NOM,NOA,ITC,ETC,CAC,DIT,CLD,NOC,NOD");
@@ -46,7 +47,7 @@ abstract public class CSVMaker {
 			
 			
 			writer.close();
-                        return PATH+fileName+".csv";
+                        return file;
 		} catch (IOException e) {
 			     
 		}

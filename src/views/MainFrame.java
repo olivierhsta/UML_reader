@@ -208,9 +208,9 @@ public class MainFrame extends JFrame
     }
 
     /**
-     * Affiche une alerte.
+     * Displays an alert dialog.
      *
-     * @param message Chaine de caractère à afficher dans l'alerte.
+     * @param message Text to display
      */
     public void alert(String message)
     {
@@ -218,12 +218,21 @@ public class MainFrame extends JFrame
     }
     
     /**
-     * Affiche une alerte informative.
+     * Displays an informative dialog.
      *
-     * @param message Chaine de caractère à afficher dans l'alerte.
+     * @param message Text to display
      */
     public void info(String message){
         JOptionPane.showMessageDialog(null, message, null, JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    /**
+     * Displays a confirmation dialog
+     * @param message Text to display
+     * @return <code>0</code> when the user confirms, <code>1</code> when he cancels
+     */
+    public int confirm(String message){
+       return JOptionPane.showConfirmDialog( this,message, null, JOptionPane.YES_NO_OPTION ); 
     }
 
     /**

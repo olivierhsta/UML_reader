@@ -1,10 +1,14 @@
 package controllers;
 
+import java.awt.Desktop;
 import views.MainFrame;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import main.CSVMaker;
 import models.Model;
 import models.classes.Class;
@@ -287,14 +291,24 @@ public class UMLController
     {
         try {
             String outputFileName = this.model.getFile().getName().replaceFirst("[.][^.]+$", "") + "-analysis";
-            String filePath = CSVMaker.export(this.UMLmodels.values(), outputFileName);
-            if (filePath == null) {
+            File file = CSVMaker.export(this.UMLmodels.values(), outputFileName);
+            if (file == null) {
                 this.view.alert("Error while trying to generate metric analysis.  "
-                        + "\nMake sure the file "
+                        + "\nMake sure their is no file named "
                         + "\n" + CSVMaker.PATH + outputFileName + ".csv"
-                        + "\n is not open.");
+                        + "\n that is open.");
             } else {
-                this.view.info("File created : "+filePath);
+                int confirmation = this.view.confirm("File created : "+file.getAbsolutePath() + "\nDo you want to open it?");
+                System.out.println(confirmation);
+                if (confirmation == 0){
+                    try
+                    {
+                        Desktop.getDesktop().open(file);
+                    } catch (IOException ex)
+                    {
+                        this.view.alert("No application found to open the file");
+                    }
+                }
             }
         } catch (NullPointerException ex){
             this.view.alert("Operation not allowed");
