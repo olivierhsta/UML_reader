@@ -76,6 +76,11 @@ public class Model {
 		for (AggregationDeclaration aggregationDeclaration : aggregationDeclarations) {
 			aggregationDeclaration.apply(this.classes);
 		}
+		
+		for (Class cl : this.classes) {
+			cl.setItc(this.classes);
+			cl.setEtc(this.classes);
+		}
 
 	}
 
