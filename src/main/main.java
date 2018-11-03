@@ -1,6 +1,9 @@
 package main;
 
+import java.util.ArrayList;
+
 import controllers.UMLController;
+import models.Model;
 import models.UMLDecoder;
 import views.MainFrame;
 
@@ -14,6 +17,7 @@ public class main
         UMLDecoder model = new UMLDecoder(controller);
         controller.setModel(model);
         controller.setView(view);
+        
     }
 
 }
