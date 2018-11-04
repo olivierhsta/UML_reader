@@ -285,6 +285,16 @@ public class UMLController
     }
     
     /**
+     * Get and display the details of the metric if there is some.
+     *
+     * @param metricName Name of an metric from which to display the description
+     */
+    public void metricWasClicked(String metricName)
+    {
+        this.view.displayDetails(this.model.getMetricDescription(metricName.split(" ")[0]));
+    }
+    
+    /**
      * Exports the metrics in a CSV file
      */
     public void exportMetricsWasClicked()

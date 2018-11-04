@@ -37,10 +37,10 @@ public class MainFrame extends JFrame
 {
 
     private UMLController controller;
-    private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations;
+    private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations, cMetrics;
     private FileInputComponent cFileInput;
     private DropdownComponent cModelsNames;
-    private TextAreaComponent cDetails, cMetrics;
+    private TextAreaComponent cDetails;
     private ButtonComponent cExportMetrics;
     private JPanel pnl, pnlElement, pnlHeader;
 
@@ -72,8 +72,8 @@ public class MainFrame extends JFrame
         this.cSubClasses = new ListComponent("SubClasses");
         this.cAssociations = new ListComponent("Associations");
         this.cAggregations = new ListComponent("Aggregations");
+        this.cMetrics = new ListComponent("Metriques");
         
-        this.cMetrics = new TextAreaComponent("Metriques", 30, 20);
         this.cDetails = new TextAreaComponent("Details");
 
         this.render();
@@ -122,7 +122,7 @@ public class MainFrame extends JFrame
     /**
      * Declare the listeners of the components.
      */
-    private void declareListeners()
+    private void declareListeners() throws NullPointerException
     {
         this.cFileInput.setListener((ActionEvent e) ->
         {
@@ -145,48 +145,66 @@ public class MainFrame extends JFrame
         
         this.cModelsNames.setListener((ActionEvent e) ->
         {
-            try{
-            JComboBox cb = (JComboBox) e.getSource();
-            modelIsClicked(cb.getSelectedItem().toString());
-            } catch (NullPointerException ex){
-                
-            }
+            try {
+                JComboBox cb = (JComboBox) e.getSource();
+                modelIsClicked(cb.getSelectedItem().toString());
+            } catch (NullPointerException ex){}
         });
 
         this.cClasses.setListener((ActionEvent e) ->
         {
-            JList list = (JList) e.getSource();
-            classIsClicked(list.getSelectedValue().toString());
+            try{
+                JList list = (JList) e.getSource();
+                classIsClicked(list.getSelectedValue().toString());
+            } catch (NullPointerException ex){}
         });
 
         this.cAttributes.setListener((ActionEvent e) ->
         {
-            JList list = (JList) e.getSource();
-            attributeIsClicked(list.getSelectedValue().toString());
+            try{
+                JList list = (JList) e.getSource();
+                attributeIsClicked(list.getSelectedValue().toString());
+            } catch (NullPointerException ex){}
         });
 
         this.cMethods.setListener((ActionEvent e) ->
         {
-            JList list = (JList) e.getSource();
-            methodIsClicked(list.getSelectedValue().toString());
+            try{
+                JList list = (JList) e.getSource();
+                methodIsClicked(list.getSelectedValue().toString());
+            } catch (NullPointerException ex){}
         });
 
         this.cSubClasses.setListener((ActionEvent e) ->
         {
-            JList list = (JList) e.getSource();
-            classIsClicked(list.getSelectedValue().toString());
+            try{
+                JList list = (JList) e.getSource();
+                classIsClicked(list.getSelectedValue().toString());
+            } catch (NullPointerException ex){}
         });
 
         this.cAssociations.setListener((ActionEvent e) ->
         {
-            JList list = (JList) e.getSource();
-            associationIsClicked(list.getSelectedValue().toString());
+            try{
+                JList list = (JList) e.getSource();
+                associationIsClicked(list.getSelectedValue().toString());
+            } catch (NullPointerException ex){}
         });
 
         this.cAggregations.setListener((ActionEvent e) ->
         {
-            JList list = (JList) e.getSource();
-            aggregationIsClicked(list.getSelectedValue().toString());
+            try{
+                JList list = (JList) e.getSource();
+                aggregationIsClicked(list.getSelectedValue().toString());
+            } catch (NullPointerException ex){}
+        });
+        
+        this.cMetrics.setListener((ActionEvent e) ->
+        {
+            try{
+                JList list = (JList) e.getSource();
+                metricsIsClicked(list.getSelectedValue().toString());
+            } catch (NullPointerException ex){}
         });
         
         this.cExportMetrics.setListener((ActionEvent e) ->
@@ -384,6 +402,7 @@ public class MainFrame extends JFrame
     {
         unselectAllSubs();
         this.cMetrics.clear();
+        this.cDetails.clear();
         this.cClasses.selectElement(className); // manually select the class in case this is trigger by a subclass click
         this.controller.classWasClicked(className);
     }
@@ -434,6 +453,22 @@ public class MainFrame extends JFrame
     {
         unselectAllSubs();
         this.controller.aggregationWasClicked(aggregationName);
+    }
+    
+    
+    /**
+     * Clears all selected fields and notify the controller when a metric
+     * item is clicked.
+     *
+     * @param metricName Name of the clicked metric (with its value or not).
+     *                   If the name contains the value, it needs to contain at
+     *                   least one white space (eg. ANA=1 wont be recognize
+     *                   whereas ANA = 1 will be)
+     */
+    private void metricsIsClicked(String metricName)
+    {
+        unselectAllSubs();
+        this.controller.metricWasClicked(metricName.split(" ")[0]);
     }
     
     /**
