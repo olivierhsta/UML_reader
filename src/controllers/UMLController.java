@@ -299,7 +299,6 @@ public class UMLController
                         + "\n that is open.");
             } else {
                 int confirmation = this.view.confirm("File created : "+file.getAbsolutePath() + "\nDo you want to open it?");
-                System.out.println(confirmation);
                 if (confirmation == 0){
                     try
                     {
