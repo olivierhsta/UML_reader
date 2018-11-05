@@ -1,0 +1,27 @@
+﻿Chemin,Nom,Taille (#classes),Taille (NCLOC),Taille (CLOC),ANA,NOM,NOA,ITC,ETC,CAC,DIT,CLD,NOC,NOD
+src/controllers/,UMLController,1,219,75,0.78571427,14,6,0,0,0,0,0,0,0
+src/models/,Model,3,64,9,0,2,2,0,0,0,0,0,0,0
+src/models/,ModelDeclaration,3,32,18,0.2,5,2,0,0,0,0,1,2,2
+src/models/,UMLDecoder,3,83,4,0.4,5,4,0,0,0,0,0,0,0
+src/models/aggregations/,Aggregation,2,34,7,0,2,2,0,1,0,0,0,0,0
+src/models/aggregations/,AggregationDeclaration,2,37,11,0.5,2,1,0,0,0,1,0,0,0
+src/models/classes/,Attribute,3,31,15,0.25,4,2,0,0,1,0,0,0,0
+src/models/classes/,Class,3,259,76,0.26086956,23,12,3,1,3,0,0,0,0
+src/models/classes/,Operation,3,49,11,0.2,5,3,0,0,0,0,0,0,0
+src/models/generalizations/,Generalization,1,47,9,5,2,1,0,0,0,0,0,0,0
+src/models/relations/,Relation,2,16,6,0,2,2,0,1,0,0,0,0,0
+src/models/relations/,RelationDeclaration,2,39,10,0.5,2,2,0,0,0,1,0,0,0
+src/views/,FileChooser,2,66,34,0,4,3,0,0,0,0,0,0,0
+src/views/,MainFrame,2,322,149,0.88,25,14,0,0,1,0,0,0,0
+src/views/components/,ButtonComponent,7,25,27,1,2,1,0,0,0,1,0,0,0
+src/views/components/,Component,7,23,19,0,2,1,0,0,0,0,1,7,7
+src/views/components/,DropdownComponent,7,42,25,0.75,4,3,0,0,0,1,0,0,0
+src/views/components/,FileInputComponent,7,41,19,0.75,4,4,0,0,0,1,0,0,0
+src/views/components/,LabelComponent,7,20,21,0.5,2,1,0,0,0,1,0,0,0
+src/views/components/,ListComponent,7,139,68,0.625,8,5,0,0,1,1,0,0,0
+src/views/components/,TextAreaComponent,7,64,47,0.75,4,4,0,0,0,1,0,0,0
+,min,1,16,4,0,2,1,0,0,0,0,0,0,0
+,max,7,322,149,5,25,14,3,1,3,1,1,7,7
+,tendance centrale,3.857142857,78.66666667,31.42857143,0.635789706,5.857142857,3.571428571,0.142857143,0.142857143,0.285714286,0.380952381,0.095238095,0.428571429,0.428571429
+,ecart type,2.294625486,82.6417013,34.16984389,1.025893926,6.490180967,3.36043405,0.638876565,0.349927106,0.699854212,0.485620906,0.293543524,1.529750324,1.529750324
+,,,,,,,,,,,,,,
