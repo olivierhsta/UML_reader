@@ -1,0 +1,368 @@
+MODEL Models
+CLASS Model
+ATTRIBUTES
+      name : String,
+      classes : ArrayList<Class>
+OPERATIONS
+      getClasses() : ArrayList<Class>,
+      getName() : String
+;
+
+CLASS ModelDeclaration
+ATTRIBUTES
+    names : String,
+    lines : ArrayList<String>
+OPERATIONS
+    addLine(line : String) : void,
+    getLineCount() : int,
+    getName() : String,
+    joinLines() : String,
+    getDetails() : String
+;
+
+CLASS UMLDecoder
+ATTRIBUTES
+      file : File,
+      controller : UMLController,
+      metricsDescription : HashMap<String, String>,
+      fileModels : ArrayList<Model>
+OPERATIONS
+      setFile(file : File) : void,
+      getFile() : File,
+      parseFile() : void,
+      getUMLModels() : ArrayList<Model>,
+      getMetricDescription(metricName : String) : String
+;
+
+CLASS Aggregation
+ATTRIBUTES
+      name : String,
+      details : String
+OPERATIONS
+      getName() : String,
+      getDetails() : String
+;
+
+CLASS AggregationDeclaration
+ATTRIBUTES
+    containerLine : String
+OPERATIONS
+      apply(classes : ArrayList<Class>) : void,
+      parseLine() : void
+;
+
+CLASS Attribute
+ATTRIBUTES
+      name : String,
+      type : String
+OPERATIONS
+      getName() : String,
+      getDetails() : String,
+      getType() : String,
+      extractAttributesFromString(line : String) : ArrayList<Attribute>
+;
+
+CLASS Class
+ATTRIBUTES
+      attributes : ArrayList<Attribute>,
+      operations : ArrayList<Operation>,
+      subClasses : ArrayList<Class>,
+      relations : ArrayList<Relation>,
+      aggregations : ArrayList<Aggregation>,
+      parent : Class,
+      ana : float,
+      itc : int,
+      etc : int,
+      nod : int,
+      cld : int,
+      dit : int
+OPERATIONS
+      getANA() : float,
+      getNOM() : int,
+      getNOA() : int,
+      getITC() : int,
+      setITC(allClasses : ArrayList<Class>) : void,
+      getETC() : int,
+      setETC(allClasses : ArrayList<Class>) : void,
+      getCAC() : int,
+      getDIT() : int,
+      getCLD() : int,
+      getNOC() : int,
+      getNOD() : int,
+      getName() : String,
+      getAttributes() : ArrayList<Attribute>,
+      getSubClasses() : ArrayList<Class>,
+      getOperations() : ArrayList<Operation>,
+      getRelations() : ArrayList<Relation>,
+      getAggregations() : ArrayList<Aggregation>,
+      addRelation(relation : Relation) : void,
+      addAggregation(aggregation : Aggregation) : void,
+      setSubClasses(subClasses : ArrayList<Class>) : void,
+      parseLines() : void,
+      setParent(parent : Class) : void
+;
+
+CLASS Operation
+ATTRIBUTES
+      name : String,
+      parameters : ArrayList<Attribute>,
+      type : String
+OPERATIONS
+      getName() : String,
+      getDetails() : String,
+      getType() : String,
+      getParameters() : ArrayList<Attribute>,
+      extractOpetationFromString(line : String) : ArrayList<Attribute>
+;
+
+CLASS Generalization
+ATTRIBUTES
+      strSubClasses : ArrayList<String>
+OPERATIONS
+      apply(classList : ArrayList<Class>) : void,
+      parseLine() : void
+;
+
+CLASS Relation
+ATTRIBUTES
+      name : String,
+      details : String
+OPERATIONS
+      getName() : String,
+      getDetails() : String
+;
+
+CLASS RelationDeclaration
+ATTRIBUTES
+    roles : ArrayList<String[]>,
+    strLines : String
+OPERATIONS
+      apply(classeList : ArrayList<Class>) : void,
+      parseLine() : void
+;
+
+GENERALIZATION ModelDeclaration
+	SUBCLASSES AggregationDeclaration, RelationDeclaration
+;
+
+RELATION is_parent_of
+       ROLES
+       CLASS Class ONE,
+       CLASS Class ONE
+;
+
+RELATION is_subClass_of
+       ROLES
+       CLASS Class ONE_OR_MANY,
+       CLASS Class ONE
+;
+
+AGGREGATION
+CONTAINER
+       CLASS Class ONE
+PARTS
+       CLASS Attribute ONE_OR_MANY,
+       CLASS Operation ONE_OR_MANY,
+       CLASS Relation ONE_OR_MANY,
+       CLASS Aggregation ONE_OR_MANY
+;
+
+MODEL Views
+CLASS MainFrame
+ATTRIBUTES
+      controller : UMLController,
+      cClasses : ListComponent,
+      cAttributes : ListComponent,
+      cMethods : ListComponent,
+      cSubClasses : ListComponent,
+      cAssociations : ListComponent,
+      cAggregations : ListComponent,
+      cMetrics : ListComponent,
+      cFileInput, FileInputComponent,
+      cModelsNames : DropdownComponent,
+      cDetails : TextAreaComponent,
+      cExportMetrics : ButtonComponent,
+      pnl : JPanel,
+      pnlElement : JPanel,
+      pnlHeader : JPanel
+OPERATIONS
+      render() : void,
+      declareListeners() : void,
+      setFile(file : File) : void,
+      alert(message : String) : void,
+      info(message : String) : void,
+      confirm(message : String) : void,
+      displayClasses(classes : Set<String>) : void,
+      displayDetails(detail : String) : void,
+      desplayModelName(names : Set<String>, current : String) : void,
+      displayAttributes(attributes : ArrayList<String>) : void,
+      displayMethods(methods : ArrayList<String>) : void,
+      displaySubClasses(subClasses : ArrayList<String>) : void,
+      displayAssociations(associations : ArrayList<String>) : void,
+      displayAggregations(aggregations : ArrayList<String>) : void,
+      displayMetrics(metrics : ArrayList<String>) : void,
+      modelIsClicked(modelName : String) : void,
+      classIsClicked(className : String) : void,
+      attributeIsClicked(attributeName : String) : void,
+      methodIsClicked(methodName : String) : void,
+      associationIsClicked(associationName : String) : void,
+      aggregationIsClicked(aggregationName : String) : void,
+      metricsIsClicked(metricName : String) : void,
+      exportMetricsIsClicked() : void,
+      unselectAllSubs() : void,
+      clearDate(clearModels : boolean) : void
+;
+
+CLASS FileChooser
+ATTRIBUTES
+    selectedFile : File,
+    acceptedExtensions : String[],
+    cancelled : boolean
+OPERATIONS
+    getFile() : File,
+    isCancel() : boolean,
+    isValid() : boolean,
+    isEmpty() : boolean
+;
+
+CLASS Component
+ATTRIBUTES
+    pnl : JPanel
+OPERATIONS
+    toDisplay() : JComponent,
+    addComponent(component : JComponent),
+    clear() : void
+;
+
+CLASS ButtonComponent
+ATTRIBUTES
+    btn : JButton
+OPERATIONS
+    setText(btnText : String) : void,
+    setListener(al : ActionListener) : void
+;
+
+CLASS DropdownComponent
+ATTRIBUTES
+    cb : JComboBox,
+    comboBoxModel : DefaultComboBoxModel,
+    lbl : JLabel
+OPERATIONS
+    setText(labelText : String) : void,
+    addElement(elementTxt : String) : void,
+    setSelectedItem(item : String),
+    clear() : void,
+    setListener(al : ActionListener) : void
+;
+
+CLASS FileInputComponent
+ATTRIBUTES
+    btnFileSelect : JButton,
+    ta : JTextArea,
+    sp : JScrollPane,
+    file : File
+OPERATIONS
+    setFile(file : File) : void,
+    addElement(elementTxt : String) : void,
+    setSelectedItem(item : String),
+    clear() : void,
+    setListener(al : ActionListener) : void
+;
+
+CLASS LabelComponent
+ATTRIBUTES
+    lbl : JLabel
+OPERATIONS
+    clear() : void,
+    setText(labelText : String) : void
+;
+
+CLASS ListComponent
+ATTRIBUTES
+    list : JList,
+    lbl : JLabel,
+    sp : JScrollPane,
+    listModel : CustomListModel,
+    listModelString : ArrayList<String>
+OPERATIONS
+    setListener(al : ActionListener) : void,
+    unselectAll() : void,
+    addElement(obj : Object) : void,
+    clear() : void,
+    getListSize() : int,
+    getElementAt(index : int) : String,
+    selectIndex(index : int) : void,
+    selectElement(elementName : String) : void
+;
+
+CLASS CustomListModel
+ATTRIBUTES
+    elements : ArrayList<String>
+OPERATIONS
+    addElement(s : String) : void,
+    deleteAll() : void,
+    getSize() : int,
+    getElementAt(index : int)
+;
+
+CLASS TextAreaComponent
+ATTRIBUTES
+    ta : JTextArea,
+    lbl : JLabel,
+    sp : JScrollPane,
+    prefix : String
+OPERATIONS
+    setPrefix(prefix : String) : void,
+    setText(text : String) : void,
+    addElement(text : String) : void,
+    clear() : void
+;
+
+GENERALIZATION Component
+	SUBCLASSES ListComponent, ButtonComponent, DropdownComponent, FileInputComponent, LabelComponent, ListComponent, TextAreaComponent
+;
+
+RELATION is_model_of
+       ROLES
+       CLASS CustomListModel ONE,
+       CLASS ListComponent ONE
+;
+
+AGGREGATION
+CONTAINER
+       CLASS MainFrame ONE
+PARTS
+       CLASS ListComponent ONE_OR_MANY,
+       CLASS ButtonComponent ONE_OR_MANY,
+       CLASS DropdownComponent ONE_OR_MANY,
+       CLASS FileInputComponent ONE_OR_MANY,
+       CLASS LabelComponent ONE_OR_MANY,
+       CLASS ListComponent ONE_OR_MANY,
+       CLASS TextAreaComponent ONE_OR_MANY
+;
+
+MODEL Controllers
+CLASS UMLController
+ATTRIBUTES
+    model : UMLDecoder,
+    view : MainFrame,
+    UMLModels : HashMap<String, Model>,
+    classes : HashMap<String, Class>,
+    currentClass : Class,
+    currentUMLModel : Model
+OPERATIONS
+    setModel(model : UMLDecoder) : void,
+    setView(view : MainFrame) : void,
+    getModel() : UMLDecoder,
+    getView() : MainFrame,
+    generateModel(file : File) : void,
+    displayClasses(model : Model) : void,
+    modelWasClicked(modelName : String) : void,
+    classWasClicked(className : String) : void,
+    attributeWasClicked(attributeName : String) : void,
+    methodWasClicked(methodName : String) : void,
+    associationWasClicked(associationName : String) : void,
+    aggregationWasClicked(aggregationName : String) : void,
+    metricWasClicked(metricName : String) : void,
+    exportMetricsWasClicked() : void
+;

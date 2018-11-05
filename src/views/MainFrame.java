@@ -37,11 +37,11 @@ public class MainFrame extends JFrame
 {
 
     private UMLController controller;
-    private ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations, cMetrics;
-    private FileInputComponent cFileInput;
-    private DropdownComponent cModelsNames;
-    private TextAreaComponent cDetails;
-    private ButtonComponent cExportMetrics;
+    private final ListComponent cClasses, cAttributes, cMethods, cSubClasses, cAssociations, cAggregations, cMetrics;
+    private final FileInputComponent cFileInput;
+    private final DropdownComponent cModelsNames;
+    private final TextAreaComponent cDetails;
+    private final ButtonComponent cExportMetrics;
     private JPanel pnl, pnlElement, pnlHeader;
 
     /**
@@ -122,7 +122,7 @@ public class MainFrame extends JFrame
     /**
      * Declare the listeners of the components.
      */
-    private void declareListeners() throws NullPointerException
+    private void declareListeners()
     {
         this.cFileInput.setListener((ActionEvent e) ->
         {
@@ -490,6 +490,7 @@ public class MainFrame extends JFrame
         this.cAttributes.unselectAll();
         this.cMethods.unselectAll();
         this.cSubClasses.unselectAll();
+        this.cMetrics.unselectAll();
     }
 
     /**
