@@ -285,7 +285,16 @@ public class Class extends ModelDeclaration
 //    Functions used by other ModelDeclarations to represent the model
     public void addRelation(Relation relation)
     {
-        this.relations.add(relation);
+    	boolean shouldAdd = true;
+    	
+    	for (Relation rel : this.relations) {
+    		if (rel.getName().equals(relation.getName())) {
+    			shouldAdd = false;
+    		}
+    	}
+    	
+    	if (shouldAdd)
+    		this.relations.add(relation);
     }
 
     public void addAggregation(Aggregation aggregation)

@@ -14,7 +14,7 @@ abstract public class CSVMaker {
 	
 	public static File export(Collection<Model> models, String fileName) {
 		try {
-                        File file = new File(PATH+fileName+".csv");
+			File file = new File(PATH+fileName+".csv");
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			
 			// Print header
@@ -47,11 +47,11 @@ abstract public class CSVMaker {
 			
 			
 			writer.close();
-                        return file;
+			return file;
 		} catch (IOException e) {
 			     
 		}
-                return null;
+		return null;
 	}
 
 }
